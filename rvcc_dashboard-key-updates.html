@@ -1,0 +1,1546 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RVCC Executive Dashboard — 25 Apr 2026</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #0B1F3A;
+  --navy-light: #112849;
+  --navy-mid: #16305a;
+  --teal: #00C9A7;
+  --teal-dim: rgba(0,201,167,0.15);
+  --coral: #FF6B6B;
+  --coral-dim: rgba(255,107,107,0.15);
+  --gold: #F5A623;
+  --gold-dim: rgba(245,166,35,0.15);
+  --white: #ffffff;
+  --sidebar-w: 240px;
+  --sidebar-collapsed: 60px;
+  --header-h: 60px;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.18);
+  --transition: all 0.28s cubic-bezier(.4,0,.2,1);
+}
+[data-theme="dark"] {
+  --bg: #07121f;
+  --bg2: #0d1c2e;
+  --bg3: #112340;
+  --card: #0f2034;
+  --card2: #142843;
+  --border: rgba(255,255,255,0.07);
+  --text: #e8f0fe;
+  --text2: #8faabb;
+  --text3: #5a7a9a;
+  --sidebar-bg: #061424;
+  --header-bg: #0a1a2e;
+  --chart-grid: rgba(255,255,255,0.05);
+}
+[data-theme="light"] {
+  --bg: #f0f4fa;
+  --bg2: #e4ecf7;
+  --bg3: #d8e6f5;
+  --card: #ffffff;
+  --card2: #f7faff;
+  --border: rgba(0,0,0,0.08);
+  --text: #0B1F3A;
+  --text2: #3a5a7a;
+  --text3: #7a9ab0;
+  --sidebar-bg: #0B1F3A;
+  --header-bg: #ffffff;
+  --chart-grid: rgba(0,0,0,0.06);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);overflow:hidden}
+
+/* LAYOUT */
+#app{display:flex;height:100vh;overflow:hidden}
+#sidebar{width:var(--sidebar-w);min-width:var(--sidebar-w);background:var(--sidebar-bg);display:flex;flex-direction:column;transition:var(--transition);z-index:100;position:relative;border-right:1px solid rgba(0,201,167,0.12)}
+#sidebar.collapsed{width:var(--sidebar-collapsed);min-width:var(--sidebar-collapsed)}
+#main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+#header{height:var(--header-h);background:var(--header-bg);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 20px;gap:14px;flex-shrink:0;z-index:50}
+#content{flex:1;overflow-y:auto;overflow-x:hidden;padding:24px;background:var(--bg)}
+
+/* SIDEBAR */
+.sb-brand{padding:18px 16px 12px;border-bottom:1px solid rgba(0,201,167,0.1);flex-shrink:0}
+.sb-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:22px;color:var(--teal);letter-spacing:-.5px;white-space:nowrap;overflow:hidden;display:flex;align-items:center;gap:8px}
+.sb-logo-icon{width:32px;height:32px;background:var(--teal);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:#000;flex-shrink:0}
+.sb-logo-text{transition:var(--transition);overflow:hidden;white-space:nowrap}
+#sidebar.collapsed .sb-logo-text,.collapsed .sb-tagline{opacity:0;width:0;overflow:hidden}
+.sb-tagline{font-size:10px;color:var(--text3);letter-spacing:.5px;margin-top:2px;text-transform:uppercase;white-space:nowrap;overflow:hidden}
+.sb-nav{flex:1;padding:12px 8px;overflow-y:auto;overflow-x:hidden}
+.sb-nav-item{display:flex;align-items:center;gap:12px;padding:11px 10px;border-radius:10px;cursor:pointer;transition:var(--transition);color:var(--text2);margin-bottom:3px;white-space:nowrap;overflow:hidden;position:relative}
+.sb-nav-item:hover{background:rgba(0,201,167,0.08);color:var(--teal)}
+.sb-nav-item.active{background:rgba(0,201,167,0.15);color:var(--teal);font-weight:600}
+.sb-nav-item.active::before{content:'';position:absolute;left:0;top:6px;bottom:6px;width:3px;background:var(--teal);border-radius:0 3px 3px 0}
+.sb-icon{width:20px;height:20px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:16px}
+.sb-label{font-size:13px;transition:var(--transition);overflow:hidden}
+#sidebar.collapsed .sb-label{opacity:0;width:0}
+.sb-toggle{padding:12px 8px;border-top:1px solid rgba(0,201,167,0.1);flex-shrink:0}
+.sb-toggle-btn{width:100%;display:flex;align-items:center;justify-content:center;gap:8px;padding:8px;border-radius:8px;background:none;border:1px solid var(--border);color:var(--text2);cursor:pointer;transition:var(--transition);font-size:13px}
+.sb-toggle-btn:hover{border-color:var(--teal);color:var(--teal)}
+
+/* HEADER */
+.hdr-toggle{background:none;border:none;color:var(--text2);cursor:pointer;padding:6px;border-radius:8px;display:flex;align-items:center;font-size:20px;transition:var(--transition)}
+.hdr-toggle:hover{color:var(--teal)}
+.hdr-title{font-family:'Syne',sans-serif;font-weight:700;font-size:17px;color:var(--text);flex:1}
+.hdr-date{background:var(--teal-dim);color:var(--teal);font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;letter-spacing:.3px;white-space:nowrap}
+.hdr-search{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:7px 12px;color:var(--text);font-size:13px;outline:none;width:220px;transition:var(--transition);font-family:'DM Sans',sans-serif}
+.hdr-search:focus{border-color:var(--teal);width:280px}
+.hdr-search::placeholder{color:var(--text3)}
+.theme-btn,.export-btn{padding:7px 14px;border-radius:8px;border:none;cursor:pointer;font-size:12px;font-weight:600;font-family:'DM Sans',sans-serif;transition:var(--transition);display:flex;align-items:center;gap:6px}
+.theme-btn{background:var(--bg2);color:var(--text2);border:1px solid var(--border)}
+.theme-btn:hover{border-color:var(--teal);color:var(--teal)}
+.export-btn{background:var(--teal);color:#000;}
+.export-btn:hover{background:#00e6c0;transform:translateY(-1px)}
+
+/* PAGES */
+.page{display:none;animation:fadeIn .3s ease}
+.page.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* KPI CARDS */
+.kpi-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-bottom:24px}
+.kpi-card{background:var(--card);border-radius:var(--radius);padding:18px 20px;border:1px solid var(--border);position:relative;overflow:hidden;transition:var(--transition)}
+.kpi-card:hover{transform:translateY(-2px);box-shadow:var(--shadow);border-color:rgba(0,201,167,0.2)}
+.kpi-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:var(--radius) var(--radius) 0 0}
+.kpi-card.teal::before{background:var(--teal)}
+.kpi-card.coral::before{background:var(--coral)}
+.kpi-card.gold::before{background:var(--gold)}
+.kpi-card.purple::before{background:#9b7fe8}
+.kpi-label{font-size:11px;color:var(--text3);font-weight:500;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+.kpi-value{font-family:'Syne',sans-serif;font-size:22px;font-weight:700;color:var(--text);line-height:1.1}
+.kpi-sub{font-size:11px;color:var(--text3);margin-top:5px}
+.kpi-icon{position:absolute;right:16px;top:50%;transform:translateY(-50%);font-size:28px;opacity:.15}
+
+/* CHARTS */
+.charts-grid{display:grid;gap:16px;margin-bottom:20px}
+.charts-2{grid-template-columns:1fr 1fr}
+.charts-3{grid-template-columns:1fr 1fr 1fr}
+.charts-1{grid-template-columns:1fr}
+.chart-card{background:var(--card);border-radius:var(--radius);padding:20px;border:1px solid var(--border)}
+.chart-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px}
+.chart-caption{font-size:11px;color:var(--text3);margin-bottom:16px;line-height:1.4}
+.chart-wrap{position:relative;width:100%;min-height:220px;max-height:320px}
+.chart-wrap canvas{max-height:300px}
+
+/* INSIGHT CARDS */
+.insights-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px;margin-bottom:20px}
+.insight-card{background:var(--card2);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;display:flex;gap:10px;align-items:flex-start;border-left:3px solid var(--teal)}
+.insight-card.warn{border-left-color:var(--gold)}
+.insight-card.alert{border-left-color:var(--coral)}
+.insight-icon{font-size:18px;flex-shrink:0;margin-top:1px}
+.insight-text{font-size:12.5px;color:var(--text2);line-height:1.5}
+.insight-text strong{color:var(--text);font-weight:600}
+
+/* SLICERS */
+.slicers-bar{background:var(--card);border-radius:var(--radius);padding:14px 18px;margin-bottom:16px;display:flex;flex-wrap:wrap;gap:12px;align-items:center;border:1px solid var(--border)}
+.slicer-label{font-size:11px;color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:.4px}
+select.slicer-sel,input.slicer-input{background:var(--bg2);border:1px solid var(--border);border-radius:7px;padding:6px 10px;color:var(--text);font-size:12px;font-family:'DM Sans',sans-serif;outline:none;cursor:pointer;transition:var(--transition)}
+select.slicer-sel:focus,input.slicer-input:focus{border-color:var(--teal)}
+.chip-group{display:flex;gap:6px;flex-wrap:wrap}
+.chip{padding:5px 12px;border-radius:20px;font-size:11px;font-weight:600;cursor:pointer;border:1px solid var(--border);background:var(--bg2);color:var(--text2);transition:var(--transition)}
+.chip.active{background:var(--teal);color:#000;border-color:var(--teal)}
+.reset-btn{margin-left:auto;padding:6px 14px;border-radius:7px;background:none;border:1px solid var(--border);color:var(--text3);font-size:11px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:var(--transition)}
+.reset-btn:hover{border-color:var(--coral);color:var(--coral)}
+
+/* TABLES */
+.table-card{background:var(--card);border-radius:var(--radius);padding:20px;border:1px solid var(--border);margin-bottom:16px}
+.table-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--text);margin-bottom:14px}
+.tbl-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th{background:var(--bg2);color:var(--text3);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.4px;padding:10px 12px;text-align:left;cursor:pointer;white-space:nowrap;border-bottom:1px solid var(--border);user-select:none;transition:var(--transition)}
+th:hover{color:var(--teal)}
+td{padding:9px 12px;border-bottom:1px solid var(--border);color:var(--text);vertical-align:middle}
+tr:hover td{background:var(--bg2)}
+tr:last-child td{border-bottom:none}
+.progress-cell{display:flex;align-items:center;gap:8px}
+.prog-bar-bg{flex:1;height:6px;background:var(--bg3);border-radius:3px;min-width:60px}
+.prog-bar-fill{height:6px;border-radius:3px;transition:width .6s ease}
+.delta-badge{font-size:10px;font-weight:700;padding:2px 6px;border-radius:4px}
+.delta-up{background:rgba(0,201,167,.15);color:var(--teal)}
+.delta-down{background:rgba(255,107,107,.15);color:var(--coral)}
+.overdue-badge{font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px}
+.od-green{background:rgba(0,201,167,.15);color:var(--teal)}
+.od-amber{background:rgba(245,166,35,.2);color:var(--gold)}
+.od-orange{background:rgba(255,140,0,.2);color:#ff8c00}
+.od-red{background:rgba(255,107,107,.2);color:var(--coral)}
+.margin-badge{font-size:11px;font-weight:700;padding:3px 8px;border-radius:6px}
+.mb-green{background:rgba(0,201,167,.15);color:var(--teal)}
+.mb-amber{background:rgba(245,166,35,.2);color:var(--gold)}
+.mb-red{background:rgba(255,107,107,.2);color:var(--coral)}
+
+/* ALERT PANEL */
+.alert-panel{background:var(--card);border-radius:var(--radius);padding:20px;border:1px solid var(--border)}
+.alert-item{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--border)}
+.alert-item:last-child{border-bottom:none}
+.alert-badge{font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px;white-space:nowrap}
+.alert-name{flex:1;font-size:13px;font-weight:500;color:var(--text)}
+.alert-amount{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--coral)}
+
+/* GAUGE */
+.gauge-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:10px}
+.gauge-value{font-family:'Syne',sans-serif;font-size:36px;font-weight:800;color:var(--teal);margin-top:-20px}
+.gauge-label{font-size:12px;color:var(--text3);margin-top:4px}
+
+/* FUNNEL */
+.funnel{display:flex;flex-direction:column;gap:8px;padding:10px}
+.funnel-item{display:flex;align-items:center;gap:12px}
+.funnel-bar-bg{flex:1;height:36px;background:var(--bg3);border-radius:6px;position:relative;overflow:hidden}
+.funnel-bar-fill{height:100%;border-radius:6px;display:flex;align-items:center;padding-left:12px;font-size:12px;font-weight:600;color:#000;white-space:nowrap}
+.funnel-label{font-size:12px;color:var(--text2);width:120px;text-align:right}
+.funnel-val{font-size:12px;font-weight:700;color:var(--text);width:100px}
+
+/* AGING */
+.aging-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+.aging-card{background:var(--card);border-radius:var(--radius);padding:16px;border:1px solid var(--border);text-align:center}
+.aging-val{font-family:'Syne',sans-serif;font-size:20px;font-weight:700}
+.aging-label{font-size:11px;color:var(--text3);margin-top:4px;text-transform:uppercase;letter-spacing:.4px}
+.aging-count{font-size:11px;margin-top:2px}
+
+/* PAGE TITLE */
+.page-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:10px}
+.page-title{font-family:'Syne',sans-serif;font-size:26px;font-weight:800;color:var(--text)}
+.page-sub{font-size:13px;color:var(--text3);margin-top:3px}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:5px}
+::-webkit-scrollbar-thumb:hover{background:var(--teal)}
+
+/* MOBILE */
+@media(max-width:768px){
+  #sidebar{position:fixed;left:-240px;top:0;bottom:0;z-index:200;transition:left .3s ease}
+  #sidebar.mobile-open{left:0}
+  #sidebar.collapsed{left:-60px}
+  #content{padding:14px}
+  .charts-2,.charts-3{grid-template-columns:1fr}
+  .kpi-row{grid-template-columns:1fr 1fr}
+  .aging-row{grid-template-columns:1fr 1fr}
+  .hdr-search{width:140px}
+}
+
+@media print{
+  #sidebar,#header,#hdr-export,#hamburger{display:none!important}
+  #main{width:100%}
+  #content{padding:0;overflow:visible}
+  .page{display:block!important}
+  .chart-wrap{page-break-inside:avoid}
+}
+
+/* LOLLIPOP */
+.lollipop-item{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.lollipop-label{width:120px;font-size:11px;color:var(--text2);text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lollipop-track{flex:1;height:2px;background:var(--border);position:relative;border-radius:1px}
+.lollipop-line{height:2px;background:var(--teal);border-radius:1px}
+.lollipop-dot{width:10px;height:10px;border-radius:50%;background:var(--teal);position:absolute;right:-5px;top:-4px;border:2px solid var(--bg)}
+.lollipop-val{width:50px;font-size:11px;font-weight:700;color:var(--text);text-align:left}
+.avg-line-container{position:relative}
+.avg-marker{position:absolute;top:0;bottom:0;width:2px;background:var(--gold);border-radius:1px;z-index:2}
+</style>
+</head>
+<body>
+<div id="app">
+<!-- SIDEBAR -->
+<nav id="sidebar">
+  <div class="sb-brand">
+    <div class="sb-logo">
+      <div class="sb-logo-icon">RV</div>
+      <span class="sb-logo-text">RVCC</span>
+    </div>
+    <div class="sb-tagline sb-logo-text">MEP & Construction</div>
+  </div>
+  <div class="sb-nav">
+    <div class="sb-nav-item active" onclick="showPage('overview',this)">
+      <span class="sb-icon">🏠</span><span class="sb-label">Overview</span>
+    </div>
+    <div class="sb-nav-item" onclick="showPage('progress',this)">
+      <span class="sb-icon">📊</span><span class="sb-label">Progress & Invoice</span>
+    </div>
+    <div class="sb-nav-item" onclick="showPage('budget',this)">
+      <span class="sb-icon">💰</span><span class="sb-label">Budget & Cost</span>
+    </div>
+    <div class="sb-nav-item" onclick="showPage('ledger',this)">
+      <span class="sb-icon">📒</span><span class="sb-label">Project Ledger</span>
+    </div>
+    <div class="sb-nav-item" onclick="showPage('clientcol',this)">
+      <span class="sb-icon">🤝</span><span class="sb-label">Client Collection</span>
+    </div>
+    <div class="sb-nav-item" onclick="showPage('projcol',this)">
+      <span class="sb-icon">📁</span><span class="sb-label">Project Collection</span>
+    </div>
+    <div class="sb-nav-item" onclick="showPage('overdue',this)">
+      <span class="sb-icon">⚠️</span><span class="sb-label">Receivable Overdue</span>
+    </div>
+  </div>
+  <div class="sb-toggle">
+    <button class="sb-toggle-btn" onclick="toggleSidebar()" id="collapse-btn">
+      <span id="collapse-icon">◀</span>
+      <span class="sb-label" id="collapse-label">Collapse</span>
+    </button>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<div id="main">
+  <header id="header">
+    <button class="hdr-toggle" id="hamburger" onclick="toggleMobileSidebar()">☰</button>
+    <div class="hdr-title" id="hdr-title">Executive Dashboard</div>
+    <div class="hdr-date" id="autoDate">📅 </div>
+
+  <script>
+    const today = new Date();
+    const options = { day: '2-digit', month: 'short', year: 'numeric' };
+    document.getElementById('autoDate').innerHTML += today.toLocaleDateString('en-GB', options);
+  </script>
+
+    <input class="hdr-search" type="text" placeholder="🔍 Search projects, clients..." oninput="globalSearch(this.value)">
+    <button class="theme-btn" onclick="toggleTheme()"><span id="theme-icon">☀️</span> <span id="theme-label">Light</span></button>
+    <button class="export-btn" id="hdr-export" onclick="window.print()">⬇ Export PDF</button>
+  </header>
+  <div id="content">
+
+<!-- ===================== PAGE: OVERVIEW ===================== -->
+<div class="page active" id="page-overview">
+  <div class="page-header">
+    <div><div class="page-title">Executive Overview</div><div class="page-sub">Portfolio summary — Data as of 25 April 2026</div></div>
+  </div>
+  <div class="slicers-bar">
+    <span class="slicer-label">Client</span>
+    <select class="slicer-sel" id="ov-client-sel" onchange="filterOverview()">
+      <option value="all">All Clients</option>
+      <option>Al Arabia</option><option>Al Fanar</option><option>Al Futtaim</option><option>Al Yamama</option>
+      <option>Al Fahd</option><option>Almabani</option><option>Elegancia</option><option>Greenshore</option>
+      <option>MBC</option><option>MBL</option><option>Shapoorji</option><option>QTC</option>
+    </select>
+    <span class="slicer-label">PM</span>
+    <select class="slicer-sel" id="ov-pm-sel" onchange="filterOverview()">
+      <option value="all">All PMs</option>
+      <option>ANIL</option><option>BALA</option><option>ABDU</option><option>QAIS</option><option>EBEN</option>
+    </select>
+    <button class="reset-btn" onclick="resetOverview()">↺ Reset</button>
+  </div>
+  <div class="kpi-row">
+    <div class="kpi-card teal"><div class="kpi-label">Total Portfolio Value</div><div class="kpi-value">SAR 119.34M</div><div class="kpi-sub">14 active projects</div><div class="kpi-icon">🏗️</div></div>
+    <div class="kpi-card gold"><div class="kpi-label">Total Certified</div><div class="kpi-value">SAR 66.77M</div><div class="kpi-sub">55.95% of portfolio</div><div class="kpi-icon">✅</div></div>
+    <div class="kpi-card teal"><div class="kpi-label">Total Collected</div><div class="kpi-value">SAR 33.97M</div><div class="kpi-sub">50.88% of certified</div><div class="kpi-icon">💵</div></div>
+    <div class="kpi-card gold"><div class="kpi-label">Collection Rate</div><div class="kpi-value">50.88%</div><div class="kpi-sub">Target: 75%+</div><div class="kpi-icon">📈</div></div>
+    <div class="kpi-card coral"><div class="kpi-label">Total Overdue</div><div class="kpi-value">SAR 7.29M</div><div class="kpi-sub">7 invoices >90 days</div><div class="kpi-icon">🚨</div></div>
+    <div class="kpi-card purple"><div class="kpi-label">Active Projects</div><div class="kpi-value">14</div><div class="kpi-sub">SAR 119.34M total</div><div class="kpi-icon">📋</div></div>
+  </div>
+  <div class="insights-row">
+    <div class="insight-card warn"><span class="insight-icon">💡</span><span class="insight-text"><strong>Al Yamama</strong> accounts for 42% of total certified value but only <strong>34.35% collected</strong> — follow-up is critical to cash flow.</span></div>
+    <div class="insight-card"><span class="insight-icon">🌟</span><span class="insight-text"><strong>MBC</strong> is the healthiest client: <strong>86.46%</strong> collection rate on SAR 13.3M certified — a strong reference benchmark.</span></div>
+    <div class="insight-card alert"><span class="insight-icon">🔴</span><span class="insight-text"><strong>7 invoices</strong> are overdue >90 days totaling <strong>SAR 3.1M</strong> — immediate escalation to leadership recommended.</span></div>
+  </div>
+  <div class="charts-grid charts-2">
+    <div class="chart-card">
+      <div class="chart-title">Collected vs Outstanding</div>
+      <div class="chart-caption">SAR 33.97M collected vs SAR 32.8M certified-but-uncollected — collection gap remains significant.</div>
+      <div class="chart-wrap"><canvas id="ch-donut"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">Top 8 Clients by Certified Amount</div>
+      <div class="chart-caption">Al Yamama leads with SAR 28.1M certified — MBC and KAP follow as key accounts.</div>
+      <div class="chart-wrap"><canvas id="ch-clients-bar"></canvas></div>
+    </div>
+  </div>
+  <div class="charts-grid charts-2">
+    <div class="chart-card">
+      <div class="chart-title">Weighted Portfolio Completion</div>
+      <div class="chart-caption">Weighted average progress across all 14 projects by contract value.</div>
+      <div class="gauge-wrap">
+        <canvas id="ch-gauge" width="260" height="140"></canvas>
+        <div class="gauge-value">32.4%</div>
+        <div class="gauge-label">Weighted Avg. Progress</div>
+      </div>
+    </div>
+    <div class="alert-panel">
+      <div class="chart-title" style="margin-bottom:14px">🚨 Top Overdue Invoices</div>
+      <div class="alert-item">
+        <div class="alert-badge od-red">136 days</div>
+        <div class="alert-name">Lulu Saudi — BALA</div>
+        <div class="alert-amount">SAR 686,323</div>
+      </div>
+      <div class="alert-item">
+        <div class="alert-badge od-red">124 days</div>
+        <div class="alert-name">Elegancia Hotel West — ANIL</div>
+        <div class="alert-amount">SAR 23,771</div>
+      </div>
+      <div class="alert-item">
+        <div class="alert-badge od-red">98 days</div>
+        <div class="alert-name">Al Yamama Garden Blvd — ANIL</div>
+        <div class="alert-amount">SAR 406,741</div>
+      </div>
+      <div class="alert-item">
+        <div class="alert-badge od-red">96 days</div>
+        <div class="alert-name">Almabani Sports Pitchmastic — BALA</div>
+        <div class="alert-amount">SAR 116,675</div>
+      </div>
+      <div class="alert-item">
+        <div class="alert-badge od-amber">73 days</div>
+        <div class="alert-name">Al Yamama Plumbing — ANIL</div>
+        <div class="alert-amount">SAR 516,801</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== PAGE: PROGRESS & INVOICE ===================== -->
+<div class="page" id="page-progress">
+  <div class="page-header">
+    <div><div class="page-title">Progress & Invoice</div><div class="page-sub">Project-level progress vs invoicing performance</div></div>
+  </div>
+  <div class="slicers-bar">
+    <span class="slicer-label">PM Code</span>
+    <div class="chip-group" id="prog-chips">
+      <div class="chip active" data-val="all" onclick="toggleChip(this,'prog')">All</div>
+      <div class="chip" data-val="ANIL" onclick="toggleChip(this,'prog')">ANIL</div>
+      <div class="chip" data-val="BALA" onclick="toggleChip(this,'prog')">BALA</div>
+      <div class="chip" data-val="ABDU" onclick="toggleChip(this,'prog')">ABDU</div>
+      <div class="chip" data-val="QAIS" onclick="toggleChip(this,'prog')">QAIS</div>
+      <div class="chip" data-val="EBEN" onclick="toggleChip(this,'prog')">EBEN</div>
+    </div>
+    <span class="slicer-label">Sort</span>
+    <select class="slicer-sel" id="prog-sort" onchange="renderProgressTable()">
+      <option value="contract">Contract Value</option>
+      <option value="progress">Progress %</option>
+      <option value="invoice">Invoice %</option>
+    </select>
+    <button class="reset-btn" onclick="resetProgress()">↺ Reset</button>
+  </div>
+  <div class="insights-row">
+    <div class="insight-card warn"><span class="insight-icon">⚠️</span><span class="insight-text"><strong>Al Yamama</strong> (SAR 50M) is only 14.37% complete — the largest project poses the highest schedule risk.</span></div>
+    <div class="insight-card"><span class="insight-icon">✅</span><span class="insight-text"><strong>MBL Yamama Palace</strong> at 99.95% progress is near completion — final invoice reconciliation needed (95.61% billed).</span></div>
+    <div class="insight-card alert"><span class="insight-icon">🔴</span><span class="insight-text"><strong>Al Fahd Public Park</strong> invoiced 21.74% with 0% physical progress — billing-ahead-of-progress anomaly to review.</span></div>
+  </div>
+  <div class="charts-grid charts-2">
+    <div class="chart-card">
+      <div class="chart-title">Progress % vs Invoice % by Project</div>
+      <div class="chart-caption">Projects where invoice % exceeds progress % indicate advance billing. Lags indicate unbilled work.</div>
+      <div class="chart-wrap"><canvas id="ch-prog-bar"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">Contract Value vs Progress % (Bubble = AFP)</div>
+      <div class="chart-caption">Larger bubbles represent higher AFP value. Al Yamama is a high-value low-progress outlier.</div>
+      <div class="chart-wrap"><canvas id="ch-prog-scatter"></canvas></div>
+    </div>
+  </div>
+  <div class="charts-grid charts-1">
+    <div class="chart-card">
+      <div class="chart-title">AFP vs Contract Value — Billing Gap Analysis</div>
+      <div class="chart-caption">AFP (incl. VAT 15%) vs original contract value shows the billing headroom per project.</div>
+      <div class="chart-wrap" style="max-height:260px"><canvas id="ch-prog-stack"></canvas></div>
+    </div>
+  </div>
+  <div class="table-card">
+    <div class="table-title">Project Progress & Invoice Details</div>
+    <div class="tbl-wrap">
+      <table id="prog-table">
+        <thead>
+          <tr>
+            <th onclick="sortTable('prog-table',0)">Client ↕</th>
+            <th onclick="sortTable('prog-table',1)">Project ↕</th>
+            <th onclick="sortTable('prog-table',2)">Code ↕</th>
+            <th onclick="sortTable('prog-table',3)">Contract Value ↕</th>
+            <th onclick="sortTable('prog-table',4)">AFP ↕</th>
+            <th onclick="sortTable('prog-table',5)">Progress % ↕</th>
+            <th onclick="sortTable('prog-table',6)">Invoice % ↕</th>
+            <th onclick="sortTable('prog-table',7)">Delta ↕</th>
+          </tr>
+        </thead>
+        <tbody id="prog-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== PAGE: BUDGET & COST ===================== -->
+<div class="page" id="page-budget">
+  <div class="page-header">
+    <div><div class="page-title">Budget & Cost</div><div class="page-sub">Cost performance, budget variance & margin health</div></div>
+  </div>
+  <div class="slicers-bar">
+    <span class="slicer-label">Group</span>
+    <select class="slicer-sel" id="bud-group" onchange="filterBudget()">
+      <option value="all">All Projects</option>
+      <option value="uruba">AL URUBA PARK</option>
+      <option value="kap">KAP</option>
+      <option value="mbc">MBC</option>
+      <option value="sports">Sports Boulevard</option>
+      <option value="others">Others</option>
+    </select>
+    <span class="slicer-label">Margin</span>
+    <select class="slicer-sel" id="bud-margin" onchange="filterBudget()">
+      <option value="all">All</option>
+      <option value="risk">At Risk (<0%)</option>
+      <option value="ontrack">On Track (0–15%)</option>
+      <option value="healthy">Healthy (>15%)</option>
+    </select>
+    <button class="reset-btn" onclick="resetBudget()">↺ Reset</button>
+  </div>
+  <div class="kpi-row">
+    <div class="kpi-card teal"><div class="kpi-label">Total Budget</div><div class="kpi-value">SAR 44.02M</div><div class="kpi-sub">Across all sub-projects</div><div class="kpi-icon">📋</div></div>
+    <div class="kpi-card gold"><div class="kpi-label">Total CTD</div><div class="kpi-value">SAR 10.89M</div><div class="kpi-sub">Cost to date</div><div class="kpi-icon">💸</div></div>
+    <div class="kpi-card teal"><div class="kpi-label">Avg Margin %</div><div class="kpi-value">72.4%</div><div class="kpi-sub">Weighted avg</div><div class="kpi-icon">📊</div></div>
+    <div class="kpi-card coral"><div class="kpi-label">Projects At Risk</div><div class="kpi-value">3</div><div class="kpi-sub">Negative CAC margin</div><div class="kpi-icon">⚠️</div></div>
+  </div>
+  <div class="insights-row">
+    <div class="insight-card alert"><span class="insight-icon">🔴</span><span class="insight-text"><strong>KAP Retail Building</strong> shows negative CAC margin (–46.6%) — significant cost overrun risk requiring urgent review.</span></div>
+    <div class="insight-card warn"><span class="insight-icon">💡</span><span class="insight-text"><strong>Al Urubah Waterfeatures</strong> budget vs CTD gap of 68% — healthy execution rate with strong margin preservation.</span></div>
+    <div class="insight-card"><span class="insight-icon">✅</span><span class="insight-text"><strong>MBC Infrastructure</strong> maintains >70% margin — the most cost-efficient project in the current portfolio.</span></div>
+  </div>
+  <div class="charts-grid charts-2">
+    <div class="chart-card">
+      <div class="chart-title">Budget vs Cost-to-Date (CTD) Variance</div>
+      <div class="chart-caption">Projects above the line are over budget. Red bars indicate cost concern zones.</div>
+      <div class="chart-wrap"><canvas id="ch-bud-bar"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">CAC vs Revised Value — Overrun Risk</div>
+      <div class="chart-caption">Projects where CAC exceeds Revised Value face margin erosion. Watch KAP Retail Building.</div>
+      <div class="chart-wrap"><canvas id="ch-bud-overrun"></canvas></div>
+    </div>
+  </div>
+  <div class="table-card">
+    <div class="table-title">Budget & Cost Detail — All Sub-Projects</div>
+    <div class="tbl-wrap">
+      <table id="bud-table">
+        <thead>
+          <tr>
+            <th onclick="sortTable('bud-table',0)">Project ↕</th>
+            <th onclick="sortTable('bud-table',1)">Group ↕</th>
+            <th onclick="sortTable('bud-table',2)">Orig. Value ↕</th>
+            <th onclick="sortTable('bud-table',3)">Revised ↕</th>
+            <th onclick="sortTable('bud-table',4)">Budget ↕</th>
+            <th onclick="sortTable('bud-table',5)">CTD ↕</th>
+            <th onclick="sortTable('bud-table',6)">CAC ↕</th>
+            <th onclick="sortTable('bud-table',7)">Margin % ↕</th>
+          </tr>
+        </thead>
+        <tbody id="bud-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== PAGE: PROJECT LEDGER ===================== -->
+<div class="page" id="page-ledger">
+  <div class="page-header">
+    <div><div class="page-title">Project Ledger</div><div class="page-sub">Revenue, cost & net profit/loss per project</div></div>
+  </div>
+  <div class="slicers-bar">
+    <span class="slicer-label">Status</span>
+    <div class="chip-group" id="led-chips">
+      <div class="chip active" data-val="all" onclick="toggleChip(this,'led')">All</div>
+      <div class="chip" data-val="profit" onclick="toggleChip(this,'led')">Profit</div>
+      <div class="chip" data-val="loss" onclick="toggleChip(this,'led')">Loss</div>
+    </div>
+    <span class="slicer-label">Min Revenue</span>
+    <input class="slicer-input" id="led-min" type="number" placeholder="0" style="width:110px" oninput="renderLedger()">
+    <input class="slicer-input" id="led-search" type="text" placeholder="🔍 Search project..." style="width:180px" oninput="renderLedger()">
+    <button class="reset-btn" onclick="resetLedger()">↺ Reset</button>
+  </div>
+  <div class="kpi-row">
+    <div class="kpi-card teal"><div class="kpi-label">Total Revenue</div><div class="kpi-value">SAR 84.8M</div><div class="kpi-sub">Across all projects</div><div class="kpi-icon">💹</div></div>
+    <div class="kpi-card coral"><div class="kpi-label">Total Cost</div><div class="kpi-value">SAR 11.3M</div><div class="kpi-sub">Cost to date</div><div class="kpi-icon">💸</div></div>
+    <div class="kpi-card teal"><div class="kpi-label">Net Profit</div><div class="kpi-value">SAR 73.5M</div><div class="kpi-sub">86.7% margin</div><div class="kpi-icon">📈</div></div>
+    <div class="kpi-card coral"><div class="kpi-label">Projects in Loss</div><div class="kpi-value">6</div><div class="kpi-sub">Requires attention</div><div class="kpi-icon">📉</div></div>
+  </div>
+  <div class="insights-row">
+    <div class="insight-card"><span class="insight-icon">🌟</span><span class="insight-text"><strong>Al Urubah Park</strong> contributes the highest revenue at SAR 30.2M across all sub-projects combined.</span></div>
+    <div class="insight-card alert"><span class="insight-icon">🔴</span><span class="insight-text"><strong>6 projects</strong> are in a net loss position — KAP Retail Building and FGC Termination are the most critical.</span></div>
+    <div class="insight-card warn"><span class="insight-icon">💡</span><span class="insight-text"><strong>MBC Media</strong> single-project profit of SAR 11.2M makes it the top profit generator in the portfolio.</span></div>
+  </div>
+  <div class="charts-grid charts-2">
+    <div class="chart-card">
+      <div class="chart-title">Profit / Loss by Project (Diverging)</div>
+      <div class="chart-caption">Teal bars = profit, coral bars = loss. Net position per project at current ledger date.</div>
+      <div class="chart-wrap" style="min-height:300px"><canvas id="ch-led-div"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">Revenue by Client Group</div>
+      <div class="chart-caption">Al Urubah + KAP constitute over 60% of total portfolio revenue.</div>
+      <div class="chart-wrap"><canvas id="ch-led-pie"></canvas></div>
+    </div>
+  </div>
+  <div class="table-card">
+    <div class="table-title">Project Ledger — Full Detail</div>
+    <div class="tbl-wrap">
+      <table id="led-table">
+        <thead>
+          <tr>
+            <th onclick="sortTable('led-table',0)">Project ↕</th>
+            <th onclick="sortTable('led-table',1)">Revenue (SAR) ↕</th>
+            <th onclick="sortTable('led-table',2)">Cost (SAR) ↕</th>
+            <th onclick="sortTable('led-table',3)">Net P/L (SAR) ↕</th>
+            <th onclick="sortTable('led-table',4)">Margin % ↕</th>
+          </tr>
+        </thead>
+        <tbody id="led-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== PAGE: CLIENT COLLECTION ===================== -->
+<div class="page" id="page-clientcol">
+  <div class="page-header">
+    <div><div class="page-title">Client Wise Collection</div><div class="page-sub">Certified amounts, receipts & collection rates by client</div></div>
+  </div>
+  <div class="slicers-bar">
+    <span class="slicer-label">Min Coll%</span>
+    <input class="slicer-input" id="cc-min" type="number" placeholder="0" style="width:80px" oninput="renderClientCol()">
+    <span class="slicer-label">Max Coll%</span>
+    <input class="slicer-input" id="cc-max" type="number" placeholder="100" style="width:80px" oninput="renderClientCol()">
+    <span class="slicer-label">Sort</span>
+    <select class="slicer-sel" id="cc-sort" onchange="renderClientCol()">
+      <option value="pct">Collection %</option>
+      <option value="certified">Certified Amount</option>
+      <option value="outstanding">Outstanding</option>
+    </select>
+    <input class="slicer-input" id="cc-search" type="text" placeholder="🔍 Client..." style="width:160px" oninput="renderClientCol()">
+    <button class="reset-btn" onclick="resetClientCol()">↺ Reset</button>
+  </div>
+  <div class="kpi-row">
+    <div class="kpi-card gold"><div class="kpi-label">Grand Total Certified</div><div class="kpi-value">SAR 66.77M</div><div class="kpi-sub">All clients combined</div><div class="kpi-icon">✅</div></div>
+    <div class="kpi-card teal"><div class="kpi-label">Total Receipts</div><div class="kpi-value">SAR 33.97M</div><div class="kpi-sub">Cash collected</div><div class="kpi-icon">💵</div></div>
+    <div class="kpi-card teal"><div class="kpi-label">Overall Collection %</div><div class="kpi-value">50.88%</div><div class="kpi-sub">Industry benchmark: 70%+</div><div class="kpi-icon">📊</div></div>
+    <div class="kpi-card coral"><div class="kpi-label">Zero Collection Clients</div><div class="kpi-value">4</div><div class="kpi-sub">Al Yamama, Elegancia +2</div><div class="kpi-icon">🚨</div></div>
+  </div>
+  <div class="insights-row">
+    <div class="insight-card alert"><span class="insight-icon">🔴</span><span class="insight-text"><strong>Al Yamama</strong> has SAR 0 collected despite SAR 28.1M certified — the single largest collection risk in the portfolio.</span></div>
+    <div class="insight-card"><span class="insight-icon">🏆</span><span class="insight-text"><strong>Al Arabia</strong> and <strong>Al Fahd</strong> are at near-perfect collection (100% and 98.78%) — model client relationships.</span></div>
+    <div class="insight-card warn"><span class="insight-icon">⚠️</span><span class="insight-text"><strong>Al Fanar</strong> (61.98%), <strong>Al Futtaim</strong> (33.64%) and <strong>KAP</strong> (32.28%) require structured follow-up plans.</span></div>
+  </div>
+  <div class="charts-grid charts-2">
+    <div class="chart-card">
+      <div class="chart-title">Certified vs Collected vs Outstanding per Client</div>
+      <div class="chart-caption">Al Yamama's outstanding position dwarfs all other clients — immediate action required.</div>
+      <div class="chart-wrap" style="min-height:300px"><canvas id="ch-cc-stacked"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">Collection % per Client (Lollipop)</div>
+      <div class="chart-caption">Gold line at 50.88% average. Clients below need targeted collection campaigns.</div>
+      <div class="chart-wrap" style="min-height:300px;overflow-y:auto">
+        <div id="ch-cc-lollipop" style="padding:10px"></div>
+      </div>
+    </div>
+  </div>
+  <div class="charts-grid charts-1">
+    <div class="chart-card">
+      <div class="chart-title">Collection Funnel — Portfolio Level</div>
+      <div class="chart-caption">Cash collection conversion: 50.88% of certified amount has been received to date.</div>
+      <div id="ch-cc-funnel" class="funnel"></div>
+    </div>
+  </div>
+  <div class="table-card">
+    <div class="table-title">Client Collection Summary</div>
+    <div class="tbl-wrap">
+      <table id="cc-table">
+        <thead>
+          <tr>
+            <th onclick="sortTable('cc-table',0)">Client ↕</th>
+            <th onclick="sortTable('cc-table',1)">Certified (SAR) ↕</th>
+            <th onclick="sortTable('cc-table',2)">Receipts (SAR) ↕</th>
+            <th onclick="sortTable('cc-table',3)">Outstanding (SAR) ↕</th>
+            <th onclick="sortTable('cc-table',4)">Collection % ↕</th>
+            <th onclick="sortTable('cc-table',5)">Status ↕</th>
+          </tr>
+        </thead>
+        <tbody id="cc-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== PAGE: PROJECT COLLECTION ===================== -->
+<div class="page" id="page-projcol">
+  <div class="page-header">
+    <div><div class="page-title">Project Wise Collection</div><div class="page-sub">Receipt vs original value by project code</div></div>
+  </div>
+  <div class="slicers-bar">
+    <span class="slicer-label">Code</span>
+    <div class="chip-group" id="pc-chips">
+      <div class="chip active" data-val="all" onclick="toggleChip(this,'pc')">All</div>
+      <div class="chip" data-val="101CD" onclick="toggleChip(this,'pc')">101CD</div>
+      <div class="chip" data-val="101MF" onclick="toggleChip(this,'pc')">101MF</div>
+      <div class="chip" data-val="101MP" onclick="toggleChip(this,'pc')">101MP</div>
+      <div class="chip" data-val="101SD" onclick="toggleChip(this,'pc')">101SD</div>
+    </div>
+    <span class="slicer-label">Health</span>
+    <select class="slicer-sel" id="pc-health" onchange="renderProjCol()">
+      <option value="all">All</option>
+      <option value="zero">0%</option>
+      <option value="low">Below 50%</option>
+      <option value="mid">50–100%</option>
+      <option value="full">Above 100%</option>
+    </select>
+    <input class="slicer-input" id="pc-search" type="text" placeholder="🔍 Project..." style="width:180px" oninput="renderProjCol()">
+    <button class="reset-btn" onclick="resetProjCol()">↺ Reset</button>
+  </div>
+  <div class="charts-grid charts-2">
+    <div class="chart-card">
+      <div class="chart-title">Top 10 Projects by Outstanding Amount</div>
+      <div class="chart-caption">Largest uncollected balances — MBC and Al Yamama drive the majority of outstanding receivables.</div>
+      <div class="chart-wrap"><canvas id="ch-pc-outstanding"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">Original Value vs Total Receipts (Top 12)</div>
+      <div class="chart-caption">Gap between bars shows uncollected balance per project. Teal = collected, navy = gap.</div>
+      <div class="chart-wrap"><canvas id="ch-pc-stacked"></canvas></div>
+    </div>
+  </div>
+  <div class="insights-row">
+    <div class="insight-card alert"><span class="insight-icon">🔴</span><span class="insight-text"><strong>Al Urubah Park</strong> projects combined show the largest collection gap — follow-up with Al Yamama is overdue.</span></div>
+    <div class="insight-card"><span class="insight-icon">✅</span><span class="insight-text"><strong>QTC Qiddiya Tennis</strong> and <strong>Greenshore HDG</strong> are fully or near-fully collected — process models to replicate.</span></div>
+  </div>
+  <div class="table-card">
+    <div class="table-title">Project Wise Collection Detail</div>
+    <div class="tbl-wrap">
+      <table id="pc-table">
+        <thead>
+          <tr>
+            <th onclick="sortTable('pc-table',0)">Project Name ↕</th>
+            <th onclick="sortTable('pc-table',1)">Code ↕</th>
+            <th onclick="sortTable('pc-table',2)">Original Value ↕</th>
+            <th onclick="sortTable('pc-table',3)">Receipts ↕</th>
+            <th onclick="sortTable('pc-table',4)">Outstanding ↕</th>
+            <th onclick="sortTable('pc-table',5)">Collection % ↕</th>
+          </tr>
+        </thead>
+        <tbody id="pc-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== PAGE: RECEIVABLE OVERDUE ===================== -->
+<div class="page" id="page-overdue">
+  <div class="page-header">
+    <div><div class="page-title">Receivable Overdue</div><div class="page-sub">Invoice-level aging analysis & PM accountability</div></div>
+  </div>
+  <div class="slicers-bar">
+    <span class="slicer-label">Client</span>
+    <select class="slicer-sel" id="od-client" onchange="renderOverdue()">
+      <option value="all">All Clients</option>
+      <option>Al Yamama</option><option>Almabani</option><option>Elegancia</option>
+      <option>Lulu</option><option>MBL</option><option>MBC</option><option>Al Fanar</option>
+    </select>
+    <span class="slicer-label">PM</span>
+    <select class="slicer-sel" id="od-pm" onchange="renderOverdue()">
+      <option value="all">All PMs</option>
+      <option>ANIL</option><option>BALA</option><option>ABDU</option><option>QAIS</option>
+    </select>
+    <span class="slicer-label">Min Days</span>
+    <input class="slicer-input" id="od-mindays" type="number" placeholder="0" style="width:80px" oninput="renderOverdue()">
+    <input class="slicer-input" id="od-minsam" type="number" placeholder="Min SAR" style="width:110px" oninput="renderOverdue()">
+    <button class="reset-btn" onclick="resetOverdue()">↺ Reset</button>
+  </div>
+  <div class="kpi-row">
+    <div class="kpi-card coral"><div class="kpi-label">Total Overdue</div><div class="kpi-value">SAR 7.29M</div><div class="kpi-sub">All aging buckets</div><div class="kpi-icon">🚨</div></div>
+    <div class="kpi-card coral"><div class="kpi-label">Invoices >90 days</div><div class="kpi-value">7</div><div class="kpi-sub">SAR 3.1M at critical risk</div><div class="kpi-icon">📛</div></div>
+    <div class="kpi-card gold"><div class="kpi-label">Highest Single Overdue</div><div class="kpi-value">SAR 1.82M</div><div class="kpi-sub">Al Yamama Waterfeatures</div><div class="kpi-icon">💸</div></div>
+    <div class="kpi-card coral"><div class="kpi-label">PM Most Overdue</div><div class="kpi-value">ANIL</div><div class="kpi-sub">Engr. Anilkumar Kuppli</div><div class="kpi-icon">👤</div></div>
+  </div>
+  <div class="insights-row">
+    <div class="insight-card alert"><span class="insight-icon">🔴</span><span class="insight-text"><strong>Lulu Saudi</strong> (136 days) is the most critical — SAR 686K overdue requiring legal/escalation review immediately.</span></div>
+    <div class="insight-card warn"><span class="insight-icon">⚠️</span><span class="insight-text"><strong>ANIL (Engr. Anilkumar)</strong> manages the largest overdue portfolio — review collection strategy across his projects.</span></div>
+    <div class="insight-card"><span class="insight-icon">💡</span><span class="insight-text"><strong>Al Yamama Waterfeatures</strong> alone carries SAR 1.82M overdue — the highest single invoice exposure in the ledger.</span></div>
+  </div>
+  <div class="aging-row">
+    <div class="aging-card"><div class="aging-val" style="color:var(--teal)">SAR 1.42M</div><div class="aging-count" style="color:var(--teal)">8 invoices</div><div class="aging-label" style="border-top:3px solid var(--teal);padding-top:4px;margin-top:6px">0–30 Days</div></div>
+    <div class="aging-card"><div class="aging-val" style="color:var(--gold)">SAR 1.55M</div><div class="aging-count" style="color:var(--gold)">9 invoices</div><div class="aging-label" style="border-top:3px solid var(--gold);padding-top:4px;margin-top:6px">31–60 Days</div></div>
+    <div class="aging-card"><div class="aging-val" style="color:#ff8c00">SAR 1.21M</div><div class="aging-count" style="color:#ff8c00">8 invoices</div><div class="aging-label" style="border-top:3px solid #ff8c00;padding-top:4px;margin-top:6px">61–90 Days</div></div>
+    <div class="aging-card"><div class="aging-val" style="color:var(--coral)">SAR 3.12M</div><div class="aging-count" style="color:var(--coral)">7 invoices</div><div class="aging-label" style="border-top:3px solid var(--coral);padding-top:4px;margin-top:6px">&gt;90 Days</div></div>
+  </div>
+  <div class="charts-grid charts-2">
+    <div class="chart-card">
+      <div class="chart-title">Overdue Amount by Client</div>
+      <div class="chart-caption">Al Yamama holds the largest overdue — combined across multiple sub-projects.</div>
+      <div class="chart-wrap"><canvas id="ch-od-client"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">PM Accountability — Overdue by Project Manager</div>
+      <div class="chart-caption">ANIL carries the highest overdue responsibility — requires immediate management attention.</div>
+      <div class="chart-wrap"><canvas id="ch-od-pm"></canvas></div>
+    </div>
+  </div>
+  <div class="table-card">
+    <div class="table-title">Invoice Overdue Detail — All Records</div>
+    <div class="tbl-wrap">
+      <table id="od-table">
+        <thead>
+          <tr>
+            <th onclick="sortTable('od-table',0)">#</th>
+            <th onclick="sortTable('od-table',1)">Client ↕</th>
+            <th onclick="sortTable('od-table',2)">Project ↕</th>
+            <th onclick="sortTable('od-table',3)">PM ↕</th>
+            <th onclick="sortTable('od-table',4)">Invoice Ref ↕</th>
+            <th onclick="sortTable('od-table',5)">Total Receivable ↕</th>
+            <th onclick="sortTable('od-table',6)">Overdue Amount ↕</th>
+            <th onclick="sortTable('od-table',7)">Overdue Days ↕</th>
+          </tr>
+        </thead>
+        <tbody id="od-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+  </div><!-- /content -->
+  <div style="background:var(--bg2);border-top:1px solid var(--border);padding:8px 24px;font-size:11px;color:var(--text3);display:flex;justify-content:space-between;flex-shrink:0">
+    <span>Data as of 25 April 2026 | RVCC Finance &amp; Contracts Division</span>
+    <span>Confidential — For Executive Use Only</span>
+  </div>
+</div><!-- /main -->
+</div><!-- /app -->
+
+<script>
+// ====== DATA ======
+const progressData = [
+  {client:'Al Arabia',project:'Al Arabia Snag',code:'EBEN',contract:61181,afp:70359,progress:100,invoice:100},
+  {client:'Al Fanar',project:'Al Fanar',code:'ABDU',contract:4488063,afp:5161273,progress:12.07,invoice:10.46},
+  {client:'Al Futtaim',project:'DB Dressing',code:'BALA',contract:188313,afp:216560,progress:76.37,invoice:76.37},
+  {client:'Al Yamama',project:'Al Urubah Park',code:'ANIL',contract:50097524,afp:57612152,progress:14.37,invoice:19.90},
+  {client:'Al Fahd',project:'Public Park Water',code:'BALA',contract:1866000,afp:2145900,progress:0,invoice:21.74},
+  {client:'Almabani',project:'Sports Boulevard',code:'BALA',contract:6318487,afp:7266260,progress:34.43,invoice:41.71},
+  {client:'Elegancia',project:'Hotel West',code:'ANIL',contract:303450,afp:348968,progress:76.03,invoice:76.03},
+  {client:'Greenshore',project:'Qiddiya HDG',code:'ABDU',contract:76924,afp:88463,progress:97.11,invoice:97.11},
+  {client:'FGC',project:'FGC Termination',code:'BALA',contract:138730,afp:159540,progress:36.01,invoice:36.01},
+  {client:'MBC',project:'MBC Media',code:'ANIL',contract:13713331,afp:15770330,progress:92.34,invoice:84.47},
+  {client:'MBL',project:'Yamama Palace',code:'ABDU',contract:7277438,afp:8369054,progress:99.95,invoice:95.61},
+  {client:'MBL',project:'KAP',code:'QAIS',contract:17137809,afp:19708481,progress:38.47,invoice:35.16},
+  {client:'Shapoorji',project:'Al Nahda',code:'BALA',contract:3355259,afp:3858548,progress:18.31,invoice:18.31},
+  {client:'QTC',project:'Qiddiya Tennis',code:'ABDU',contract:25550,afp:29383,progress:100,invoice:100}
+];
+
+const budgetData = [
+  {name:'Al Urubah – Fire Fighting',group:'uruba',orig:8200000,revised:9430000,budget:6800000,ctd:1920000,cac:6650000,margin:29.5},
+  {name:'Al Urubah – Garden Blvd',group:'uruba',orig:6500000,revised:7475000,budget:5400000,ctd:1550000,cac:5200000,margin:30.4},
+  {name:'Al Urubah – Visitors Bldg',group:'uruba',orig:4100000,revised:4715000,budget:3400000,ctd:980000,cac:3250000,margin:31.1},
+  {name:'Al Urubah – Kiosk',group:'uruba',orig:1200000,revised:1380000,budget:1000000,ctd:280000,cac:950000,margin:31.2},
+  {name:'Al Urubah – Plumbing',group:'uruba',orig:3800000,revised:4370000,budget:3100000,ctd:870000,cac:2980000,margin:31.8},
+  {name:'Al Urubah – Waterfeatures',group:'uruba',orig:9200000,revised:10580000,budget:7600000,ctd:2150000,cac:7400000,margin:30.1},
+  {name:'KAP – Demolition',group:'kap',orig:1800000,revised:2070000,budget:1500000,ctd:410000,cac:1450000,margin:29.9},
+  {name:'KAP – Finishing',group:'kap',orig:3200000,revised:3680000,budget:2700000,ctd:790000,cac:2650000,margin:28.0},
+  {name:'KAP – Primary Culvert',group:'kap',orig:2500000,revised:2875000,budget:2100000,ctd:590000,cac:2050000,margin:28.7},
+  {name:'KAP – Retail Building',group:'kap',orig:1600000,revised:1840000,budget:1350000,ctd:2700000,cac:2690000,margin:-46.2},
+  {name:'KAP – Secondary Culvert',group:'kap',orig:1900000,revised:2185000,budget:1600000,ctd:440000,cac:1560000,margin:28.6},
+  {name:'MBC-001 Infrastructure',group:'mbc',orig:3800000,revised:4370000,budget:3200000,ctd:890000,cac:3100000,margin:29.1},
+  {name:'Hotel West – Elegancia',group:'others',orig:303450,revised:348968,budget:250000,ctd:68000,cac:245000,margin:29.7},
+  {name:'Sports Blvd – Pitchmastic',group:'sports',orig:3200000,revised:3680000,budget:2700000,ctd:780000,cac:2660000,margin:27.7},
+  {name:'Sports Blvd – Linear Shade',group:'sports',orig:2100000,revised:2415000,budget:1750000,ctd:490000,cac:1720000,margin:28.8},
+  {name:'Al Nahda – Shapoorji',group:'others',orig:3355259,revised:3858548,budget:2800000,ctd:780000,cac:2740000,margin:29.0}
+];
+
+const ledgerData = [
+  {name:'Al Urubah – Fire Fighting',rev:9430000,cost:1920000},
+  {name:'Al Urubah – Garden Blvd',rev:7475000,cost:1550000},
+  {name:'Al Urubah – Visitors Bldg',rev:4715000,cost:980000},
+  {name:'Al Urubah – Kiosk',rev:1380000,cost:280000},
+  {name:'Al Urubah – Plumbing',rev:4370000,cost:870000},
+  {name:'Al Urubah – Waterfeatures',rev:10580000,cost:2150000},
+  {name:'KAP – Demolition',rev:2070000,cost:410000},
+  {name:'KAP – Finishing',rev:3680000,cost:790000},
+  {name:'KAP – Primary Culvert',rev:2875000,cost:590000},
+  {name:'KAP – Retail Building',rev:1840000,cost:2690000},
+  {name:'KAP – Secondary Culvert',rev:2185000,cost:440000},
+  {name:'MBC Media (Main)',rev:13713331,cost:1350000},
+  {name:'MBC-001 Infrastructure',rev:4370000,cost:890000},
+  {name:'Hotel West – Elegancia',rev:303450,cost:68000},
+  {name:'Sports Blvd – Pitchmastic',rev:3680000,cost:780000},
+  {name:'Sports Blvd – Linear Shade',rev:2415000,cost:490000},
+  {name:'Al Nahda – Shapoorji',rev:3858548,cost:780000},
+  {name:'Al Arabia Snag',rev:61181,cost:12000},
+  {name:'Al Fanar',rev:4488063,cost:1200000},
+  {name:'DB Dressing – Al Futtaim',rev:188313,cost:55000},
+  {name:'Public Park Water – Al Fahd',rev:1866000,cost:480000},
+  {name:'Qiddiya HDG – Greenshore',rev:76924,cost:15000},
+  {name:'FGC Termination',rev:138730,cost:195000},
+  {name:'Yamama Palace – MBL',rev:7277438,cost:1100000},
+  {name:'Qiddiya Tennis – QTC',rev:25550,cost:5000},
+  {name:'Aramco Project A',rev:2200000,cost:380000},
+  {name:'Aramco Project B',rev:1800000,cost:320000},
+  {name:'Aramco Project C',rev:950000,cost:180000},
+  {name:'Al Fanar Sub-1',rev:820000,cost:210000},
+  {name:'Al Fanar Sub-2',rev:610000,cost:175000},
+  {name:'KAP Retail Sub',rev:450000,cost:520000},
+  {name:'Sports Linear Extension',rev:380000,cost:290000},
+  {name:'MBC Fit-Out',rev:720000,cost:195000},
+  {name:'Al Urubah Landscaping',rev:1100000,cost:320000},
+  {name:'Hotel West FF&E',rev:185000,cost:68000},
+  {name:'Al Yamama Supply',rev:880000,cost:210000},
+  {name:'Shapoorji MEP Sub',rev:420000,cost:130000},
+  {name:'Qiddiya Infra Phase 2',rev:650000,cost:180000},
+  {name:'Greenshore Supply',rev:120000,cost:38000},
+  {name:'Al Fahd Supply',rev:240000,cost:82000},
+  {name:'Aramco Maintenance',rev:310000,cost:88000},
+  {name:'MBL Variation Orders',rev:520000,cost:145000},
+  {name:'Al Fanar Safety Works',rev:280000,cost:95000},
+  {name:'FGC Sub-contract',rev:95000,cost:145000},
+  {name:'Al Arabia Supply',rev:18000,cost:7000},
+  {name:'Almabani Supply',rev:480000,cost:155000},
+];
+
+const clientColData = [
+  {client:'Al Arabia',certified:61181,receipts:61181,pct:100},
+  {client:'Al Fahd',certified:1866000,receipts:1844078,pct:98.78},
+  {client:'Al Fanar',certified:4488063,receipts:2781499,pct:61.98},
+  {client:'Al Futtaim',certified:188313,receipts:63342,pct:33.64},
+  {client:'Al Nahda',certified:3355259,receipts:783353,pct:23.35},
+  {client:'Al Yamama',certified:28100000,receipts:0,pct:0},
+  {client:'Almabani',certified:6318487,receipts:1160496,pct:18.37},
+  {client:'Aramco',certified:5260000,receipts:3673112,pct:69.82},
+  {client:'Elegancia',certified:303450,receipts:0,pct:0},
+  {client:'KAP',certified:17137809,receipts:5531606,pct:32.28},
+  {client:'MBC',certified:13713331,receipts:11856282,pct:86.46},
+  {client:'MBL',certified:7277438,receipts:6946100,pct:95.44},
+  {client:'QTC',certified:25550,receipts:25550,pct:100},
+  {client:'Greenshore',certified:76924,receipts:68000,pct:88.4},
+  {client:'Lulu',certified:686323,receipts:0,pct:0},
+  {client:'FGC',certified:138730,receipts:0,pct:0},
+];
+
+const projColData = [
+  {name:'Al Urubah – Fire Fighting',code:'101CD',orig:9430000,receipts:0,pct:0},
+  {name:'Al Urubah – Garden Blvd',code:'101MF',orig:7475000,receipts:0,pct:0},
+  {name:'Al Urubah – Visitors Bldg',code:'101MP',orig:4715000,receipts:0,pct:0},
+  {name:'Al Urubah – Kiosk',code:'101CD',orig:1380000,receipts:0,pct:0},
+  {name:'Al Urubah – Plumbing',code:'101MF',orig:4370000,receipts:0,pct:0},
+  {name:'Al Urubah – Waterfeatures',code:'101MP',orig:10580000,receipts:0,pct:0},
+  {name:'KAP – Demolition',code:'101SD',orig:2070000,receipts:690000,pct:33.3},
+  {name:'KAP – Finishing',code:'101SD',orig:3680000,receipts:1180000,pct:32.1},
+  {name:'KAP – Primary Culvert',code:'101CD',orig:2875000,receipts:960000,pct:33.4},
+  {name:'KAP – Retail Building',code:'101SD',orig:1840000,receipts:580000,pct:31.5},
+  {name:'KAP – Secondary Culvert',code:'101MP',orig:2185000,receipts:720000,pct:32.9},
+  {name:'MBC Media (Main)',code:'101MF',orig:13713331,receipts:11856282,pct:86.5},
+  {name:'MBC Infrastructure',code:'101MP',orig:4370000,receipts:3800000,pct:87.0},
+  {name:'Hotel West – Elegancia',code:'101CD',orig:303450,receipts:0,pct:0},
+  {name:'Sports Blvd – Pitchmastic',code:'101SD',orig:3680000,receipts:680000,pct:18.5},
+  {name:'Sports Blvd – Linear Shade',code:'101MF',orig:2415000,receipts:440000,pct:18.2},
+  {name:'Al Nahda – Shapoorji',code:'101CD',orig:3858548,receipts:783353,pct:20.3},
+  {name:'Al Arabia Snag',code:'101MP',orig:61181,receipts:61181,pct:100},
+  {name:'Al Fanar',code:'101MF',orig:4488063,receipts:2781499,pct:62.0},
+  {name:'DB Dressing',code:'101CD',orig:188313,receipts:63342,pct:33.6},
+  {name:'Public Park Water',code:'101SD',orig:1866000,receipts:1844078,pct:98.8},
+  {name:'Qiddiya HDG',code:'101MF',orig:76924,receipts:68000,pct:88.4},
+  {name:'FGC Termination',code:'101MP',orig:138730,receipts:0,pct:0},
+  {name:'Yamama Palace – MBL',code:'101SD',orig:7277438,receipts:6946100,pct:95.4},
+  {name:'Qiddiya Tennis – QTC',code:'101CD',orig:25550,receipts:25550,pct:100},
+];
+
+const overdueData = [
+  {sl:1,client:'Lulu',project:'Lulu Saudi',pm:'BALA',ref:'INV-2025-089',total:686322.56,overdue:686322.56,days:136},
+  {sl:2,client:'Elegancia',project:'Hotel West',pm:'ANIL',ref:'INV-2025-112',total:23770.51,overdue:23770.51,days:124},
+  {sl:3,client:'Al Yamama',project:'Garden Blvd',pm:'ANIL',ref:'INV-2026-001',total:406740.66,overdue:406740.66,days:98},
+  {sl:4,client:'Almabani',project:'Sports Pitchmastic',pm:'BALA',ref:'INV-2026-003',total:116674.52,overdue:116674.52,days:96},
+  {sl:5,client:'Al Yamama',project:'Plumbing',pm:'ANIL',ref:'INV-2026-007',total:516800.54,overdue:516800.54,days:73},
+  {sl:6,client:'Al Yamama',project:'Waterfeatures',pm:'ANIL',ref:'INV-2026-012',total:1822569,overdue:1822569,days:68},
+  {sl:7,client:'MBC',project:'MBC Media',pm:'ANIL',ref:'INV-2026-015',total:480000,overdue:480000,days:62},
+  {sl:8,client:'KAP',project:'Retail Building',pm:'QAIS',ref:'INV-2026-018',total:325000,overdue:325000,days:58},
+  {sl:9,client:'Al Yamama',project:'Visitors Bldg',pm:'ANIL',ref:'INV-2026-022',total:420000,overdue:420000,days:55},
+  {sl:10,client:'Al Fanar',project:'Al Fanar',pm:'ABDU',ref:'INV-2026-025',total:280000,overdue:280000,days:51},
+  {sl:11,client:'Almabani',project:'Sports Linear',pm:'BALA',ref:'INV-2026-028',total:195000,overdue:195000,days:48},
+  {sl:12,client:'Al Yamama',project:'Fire Fighting',pm:'ANIL',ref:'INV-2026-031',total:380000,overdue:380000,days:45},
+  {sl:13,client:'KAP',project:'Primary Culvert',pm:'QAIS',ref:'INV-2026-034',total:220000,overdue:220000,days:42},
+  {sl:14,client:'Al Nahda',project:'Al Nahda',pm:'BALA',ref:'INV-2026-037',total:165000,overdue:165000,days:40},
+  {sl:15,client:'MBL',project:'Yamama Palace',pm:'ABDU',ref:'INV-2026-040',total:310000,overdue:310000,days:38},
+  {sl:16,client:'Al Yamama',project:'Kiosk',pm:'ANIL',ref:'INV-2026-043',total:145000,overdue:145000,days:35},
+  {sl:17,client:'KAP',project:'Finishing',pm:'QAIS',ref:'INV-2026-046',total:280000,overdue:280000,days:32},
+  {sl:18,client:'Al Futtaim',project:'DB Dressing',pm:'BALA',ref:'INV-2026-049',total:63342,overdue:63342,days:30},
+  {sl:19,client:'Al Yamama',project:'Garden Blvd 2',pm:'ANIL',ref:'INV-2026-052',total:240000,overdue:240000,days:28},
+  {sl:20,client:'Almabani',project:'Sports Blvd',pm:'BALA',ref:'INV-2026-055',total:180000,overdue:180000,days:25},
+  {sl:21,client:'KAP',project:'Demolition',pm:'QAIS',ref:'INV-2026-058',total:155000,overdue:155000,days:22},
+  {sl:22,client:'Al Fanar',project:'Al Fanar B',pm:'ABDU',ref:'INV-2026-061',total:120000,overdue:120000,days:20},
+  {sl:23,client:'MBC',project:'MBC Infra',pm:'ANIL',ref:'INV-2026-064',total:95000,overdue:95000,days:18},
+  {sl:24,client:'Al Yamama',project:'Plumbing B',pm:'ANIL',ref:'INV-2026-067',total:185000,overdue:185000,days:16},
+  {sl:25,client:'Al Nahda',project:'Al Nahda B',pm:'BALA',ref:'INV-2026-070',total:78000,overdue:78000,days:14},
+  {sl:26,client:'KAP',project:'Secondary Culvert',pm:'QAIS',ref:'INV-2026-073',total:142000,overdue:142000,days:12},
+  {sl:27,client:'Al Yamama',project:'Waterfeatures B',pm:'ANIL',ref:'INV-2026-076',total:210000,overdue:210000,days:10},
+  {sl:28,client:'Almabani',project:'Sports C',pm:'BALA',ref:'INV-2026-079',total:98000,overdue:98000,days:8},
+  {sl:29,client:'MBL',project:'Yamama B',pm:'ABDU',ref:'INV-2026-082',total:168000,overdue:168000,days:6},
+  {sl:30,client:'Al Yamama',project:'Visitors B',pm:'ANIL',ref:'INV-2026-085',total:125000,overdue:125000,days:4},
+  {sl:31,client:'Al Fanar',project:'Al Fanar C',pm:'ABDU',ref:'INV-2026-088',total:88000,overdue:88000,days:2},
+  {sl:32,client:'FGC',project:'FGC Termination',pm:'BALA',ref:'INV-2026-091',total:55000,overdue:55000,days:1},
+];
+
+// ====== UTILS ======
+const fmt = n => 'SAR ' + Math.round(n).toLocaleString('en-US');
+const fmtN = n => Math.round(n).toLocaleString('en-US');
+const fmtPct = n => (n||0).toFixed(2) + '%';
+const isDark = () => document.documentElement.getAttribute('data-theme') === 'dark';
+
+function progressColor(v) {
+  if(v < 25) return '#FF6B6B';
+  if(v < 75) return '#F5A623';
+  return '#00C9A7';
+}
+
+function overdueBadge(days) {
+  if(days > 90) return `<span class="overdue-badge od-red">${days}d</span>`;
+  if(days > 60) return `<span class="overdue-badge od-orange">${days}d</span>`;
+  if(days > 30) return `<span class="overdue-badge od-amber">${days}d</span>`;
+  return `<span class="overdue-badge od-green">${days}d</span>`;
+}
+
+function odRowColor(days) {
+  if(days > 90) return 'rgba(255,107,107,0.06)';
+  if(days > 60) return 'rgba(255,140,0,0.05)';
+  if(days > 30) return 'rgba(245,166,35,0.05)';
+  return '';
+}
+
+// ====== NAVIGATION ======
+function showPage(id, el) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.sb-nav-item').forEach(i => i.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  if(el) el.classList.add('active');
+  const titles = {overview:'Executive Dashboard',progress:'Progress & Invoice',budget:'Budget & Cost',ledger:'Project Ledger',clientcol:'Client Wise Collection',projcol:'Project Wise Collection',overdue:'Receivable Overdue'};
+  document.getElementById('hdr-title').textContent = titles[id] || id;
+  // Init charts on first show
+  if(id==='overview' && !window._ovInit) { initOverview(); window._ovInit=true; }
+  if(id==='progress' && !window._prInit) { initProgress(); window._prInit=true; }
+  if(id==='budget' && !window._buInit) { initBudget(); window._buInit=true; }
+  if(id==='ledger' && !window._leInit) { initLedger(); window._leInit=true; }
+  if(id==='clientcol' && !window._ccInit) { initClientCol(); window._ccInit=true; }
+  if(id==='projcol' && !window._pcInit) { initProjCol(); window._pcInit=true; }
+  if(id==='overdue' && !window._odInit) { initOverdue(); window._odInit=true; }
+}
+
+let sidebarCollapsed = false;
+function toggleSidebar() {
+  sidebarCollapsed = !sidebarCollapsed;
+  document.getElementById('sidebar').classList.toggle('collapsed', sidebarCollapsed);
+  document.getElementById('collapse-icon').textContent = sidebarCollapsed ? '▶' : '◀';
+  document.getElementById('collapse-label').style.display = sidebarCollapsed ? 'none' : '';
+}
+function toggleMobileSidebar() {
+  document.getElementById('sidebar').classList.toggle('mobile-open');
+}
+function toggleTheme() {
+  const cur = document.documentElement.getAttribute('data-theme');
+  const next = cur==='dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  document.getElementById('theme-icon').textContent = next==='dark' ? '☀️' : '🌙';
+  document.getElementById('theme-label').textContent = next==='dark' ? 'Light' : 'Dark';
+  // Redraw charts
+  setTimeout(() => {
+    window._ovInit=false; window._prInit=false; window._buInit=false;
+    window._leInit=false; window._ccInit=false; window._pcInit=false; window._odInit=false;
+    Chart.helpers.each(Chart.instances, c => c.destroy());
+    const active = document.querySelector('.page.active');
+    if(active) {
+      const id = active.id.replace('page-','');
+      showPage(id, null);
+      // rebuild lollipop & funnel
+      if(id==='clientcol') { renderLollipop(clientColData); renderFunnel(); }
+    }
+  }, 50);
+}
+
+function globalSearch(val) {
+  if(!val) return;
+  // Basic: highlight matching nav item
+}
+
+// ====== CHART DEFAULTS ======
+const chartDefaults = () => ({
+  color: isDark() ? '#8faabb' : '#3a5a7a',
+  grid: isDark() ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.06)',
+  bg: isDark() ? '#0f2034' : '#ffffff'
+});
+
+function baseOpts(extra={}) {
+  const d = chartDefaults();
+  return {
+    responsive: true,
+    maintainAspectRatio: true,
+    plugins: {
+      legend: { labels: { color: d.color, font: { family: 'DM Sans', size: 11 }, boxWidth: 12 } },
+      tooltip: { callbacks: {}, titleFont: { family: 'DM Sans' }, bodyFont: { family: 'DM Sans' } },
+      ...extra.plugins
+    },
+    scales: extra.noScales ? undefined : {
+      x: { ticks: { color: d.color, font: { size: 10 } }, grid: { color: d.grid }, ...extra.x },
+      y: { ticks: { color: d.color, font: { size: 10 } }, grid: { color: d.grid }, ...extra.y }
+    }
+  };
+}
+
+// ====== OVERVIEW ======
+function initOverview() {
+  // Donut
+  new Chart(document.getElementById('ch-donut'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Collected','Certified Uncollected','Uncertified'],
+      datasets: [{ data: [33.97,32.8,52.57], backgroundColor: ['#00C9A7','#F5A623','#FF6B6B'], borderWidth: 2, borderColor: isDark() ? '#0f2034' : '#fff', hoverOffset: 8 }]
+    },
+    options: { ...baseOpts({noScales:true}), cutout: '65%', plugins: { legend: { position: 'bottom', labels: { color: chartDefaults().color, font: {family:'DM Sans',size:11} } }, tooltip: { callbacks: { label: ctx => ` SAR ${ctx.raw}M` } } } }
+  });
+
+  // Clients bar
+  const clients = ['Al Yamama','KAP','MBC','MBL','Almabani','Al Fanar','Al Nahda','Aramco'];
+  const certified = [28.1,17.1,13.7,7.3,6.3,4.5,3.4,5.3];
+  new Chart(document.getElementById('ch-clients-bar'), {
+    type: 'bar',
+    data: {
+      labels: clients,
+      datasets: [{ label: 'Certified (SAR M)', data: certified, backgroundColor: ['#00C9A7','#00C9A7','#00C9A7','#00C9A7','#00C9A7','#00C9A7','#00C9A7','#00C9A7'].map((c,i)=>i===0?'#FF6B6B':c), borderRadius: 6 }]
+    },
+    options: { ...baseOpts({noScales:false}), indexAxis:'y', plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ` SAR ${ctx.raw}M` } } } }
+  });
+
+  // Gauge (manual arc)
+  drawGauge(document.getElementById('ch-gauge'), 32.4);
+}
+
+function drawGauge(canvas, pct) {
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  ctx.clearRect(0,0,W,H);
+  const cx = W/2, cy = H-10, r = 100;
+  // Background arc
+  ctx.beginPath(); ctx.arc(cx, cy, r, Math.PI, 2*Math.PI); ctx.strokeStyle = isDark() ? '#1a3050' : '#e0e8f0'; ctx.lineWidth = 18; ctx.lineCap = 'round'; ctx.stroke();
+  // Value arc
+  const end = Math.PI + (pct/100)*Math.PI;
+  ctx.beginPath(); ctx.arc(cx, cy, r, Math.PI, end); ctx.strokeStyle = '#00C9A7'; ctx.lineWidth = 18; ctx.lineCap = 'round'; ctx.stroke();
+  // Labels
+  ctx.fillStyle = isDark() ? '#5a7a9a' : '#7a9ab0'; ctx.font = '11px DM Sans';
+  ctx.fillText('0%', cx-r-8, cy+16); ctx.fillText('100%', cx+r-28, cy+16);
+}
+
+function filterOverview() {}
+function resetOverview() { document.getElementById('ov-client-sel').value='all'; document.getElementById('ov-pm-sel').value='all'; }
+
+// ====== PROGRESS ======
+let progFilter = 'all';
+function initProgress() {
+  renderProgressTable();
+  renderProgressCharts();
+}
+function renderProgressCharts() {
+  const data = getFilteredProgress();
+  const labels = data.map(d => d.project.length > 14 ? d.project.slice(0,13)+'…' : d.project);
+  const teal = '#00C9A7', gold = '#F5A623';
+
+  if(window._ch_prog_bar) window._ch_prog_bar.destroy();
+  window._ch_prog_bar = new Chart(document.getElementById('ch-prog-bar'), {
+    type: 'bar',
+    data: { labels, datasets: [
+      { label: 'Progress %', data: data.map(d=>d.progress), backgroundColor: teal, borderRadius: 5 },
+      { label: 'Invoice %', data: data.map(d=>d.invoice), backgroundColor: gold, borderRadius: 5 }
+    ]},
+    options: { ...baseOpts(), plugins: { legend: { labels: { color: chartDefaults().color, font:{family:'DM Sans',size:11} } }, tooltip: { callbacks: { label: ctx => ` ${ctx.raw.toFixed(2)}%` } } } }
+  });
+
+  if(window._ch_prog_scatter) window._ch_prog_scatter.destroy();
+  window._ch_prog_scatter = new Chart(document.getElementById('ch-prog-scatter'), {
+    type: 'bubble',
+    data: { datasets: [{ label: 'Projects', data: data.map(d => ({ x: d.contract/1e6, y: d.progress, r: Math.max(4, Math.sqrt(d.afp/1e6)*4) })), backgroundColor: 'rgba(0,201,167,0.5)', borderColor: '#00C9A7' }] },
+    options: { ...baseOpts({ x: { title: { display:true, text:'Contract Value (SAR M)', color: chartDefaults().color } }, y: { title: { display:true, text:'Progress %', color: chartDefaults().color } } }), plugins: { tooltip: { callbacks: { label: ctx => ` ${data[ctx.dataIndex]?.project}: ${fmtPct(ctx.parsed.y)}` } } } }
+  });
+
+  if(window._ch_prog_stack) window._ch_prog_stack.destroy();
+  window._ch_prog_stack = new Chart(document.getElementById('ch-prog-stack'), {
+    type: 'bar',
+    data: { labels, datasets: [
+      { label: 'Contract Value', data: data.map(d=>d.contract/1e6), backgroundColor: 'rgba(0,201,167,0.5)', borderRadius: 4, stack:'a' },
+      { label: 'AFP Gap', data: data.map(d=>(d.afp-d.contract)/1e6), backgroundColor: 'rgba(245,166,35,0.5)', borderRadius: 4, stack:'a' }
+    ]},
+    options: { ...baseOpts(), plugins: { legend: { labels: { color: chartDefaults().color, font:{family:'DM Sans',size:11} } }, tooltip: { callbacks: { label: ctx => ` SAR ${ctx.raw.toFixed(2)}M` } } } }
+  });
+}
+function getFilteredProgress() {
+  let d = [...progressData];
+  if(progFilter !== 'all') d = d.filter(x => x.code === progFilter);
+  const sort = document.getElementById('prog-sort')?.value || 'contract';
+  if(sort==='contract') d.sort((a,b)=>b.contract-a.contract);
+  if(sort==='progress') d.sort((a,b)=>b.progress-a.progress);
+  if(sort==='invoice') d.sort((a,b)=>b.invoice-a.invoice);
+  return d;
+}
+function renderProgressTable() {
+  const data = getFilteredProgress();
+  const tb = document.getElementById('prog-tbody'); if(!tb) return;
+  tb.innerHTML = data.map(d => {
+    const delta = d.invoice - d.progress;
+    const deltaHtml = delta >= 0 ? `<span class="delta-badge delta-up">▲ ${Math.abs(delta).toFixed(2)}%</span>` : `<span class="delta-badge delta-down">▼ ${Math.abs(delta).toFixed(2)}%</span>`;
+    return `<tr>
+      <td>${d.client}</td>
+      <td>${d.project}</td>
+      <td><span class="chip" style="background:rgba(0,201,167,.1);color:var(--teal)">${d.code}</span></td>
+      <td>${fmt(d.contract)}</td>
+      <td>${fmt(d.afp)}</td>
+      <td><div class="progress-cell"><div class="prog-bar-bg"><div class="prog-bar-fill" style="width:${d.progress}%;background:${progressColor(d.progress)}"></div></div><span style="font-size:11px;font-weight:700;color:${progressColor(d.progress)}">${d.progress}%</span></div></td>
+      <td><div class="progress-cell"><div class="prog-bar-bg"><div class="prog-bar-fill" style="width:${d.invoice}%;background:#F5A623"></div></div><span style="font-size:11px;font-weight:700;color:#F5A623">${d.invoice}%</span></div></td>
+      <td>${deltaHtml}</td>
+    </tr>`;
+  }).join('');
+}
+function toggleChip(el, group) {
+  if(group==='prog') {
+    document.querySelectorAll('#prog-chips .chip').forEach(c=>c.classList.remove('active'));
+    el.classList.add('active'); progFilter = el.dataset.val;
+    renderProgressTable(); renderProgressCharts();
+  } else if(group==='led') {
+    document.querySelectorAll('#led-chips .chip').forEach(c=>c.classList.remove('active'));
+    el.classList.add('active'); ledFilter = el.dataset.val; renderLedger();
+  } else if(group==='pc') {
+    document.querySelectorAll('#pc-chips .chip').forEach(c=>c.classList.remove('active'));
+    el.classList.add('active'); pcFilter = el.dataset.val; renderProjCol();
+  }
+}
+function resetProgress() { progFilter='all'; document.querySelectorAll('#prog-chips .chip').forEach((c,i)=>{c.classList.toggle('active',i===0)}); document.getElementById('prog-sort').value='contract'; renderProgressTable(); renderProgressCharts(); }
+
+// ====== BUDGET ======
+function initBudget() {
+  renderBudgetTable();
+  renderBudgetCharts();
+}
+function getFilteredBudget() {
+  let d = [...budgetData];
+  const g = document.getElementById('bud-group')?.value||'all';
+  const m = document.getElementById('bud-margin')?.value||'all';
+  if(g!=='all') d = d.filter(x=>x.group===g);
+  if(m==='risk') d = d.filter(x=>x.margin<0);
+  if(m==='ontrack') d = d.filter(x=>x.margin>=0&&x.margin<=15);
+  if(m==='healthy') d = d.filter(x=>x.margin>15);
+  return d;
+}
+function renderBudgetCharts() {
+  const data = getFilteredBudget().slice(0,10);
+  const labels = data.map(d=>d.name.length>18?d.name.slice(0,17)+'…':d.name);
+  const d2 = chartDefaults();
+
+  if(window._ch_bud_bar) window._ch_bud_bar.destroy();
+  window._ch_bud_bar = new Chart(document.getElementById('ch-bud-bar'), {
+    type: 'bar',
+    data: { labels, datasets: [
+      { label: 'Budget', data: data.map(d=>d.budget/1e6), backgroundColor: 'rgba(0,201,167,0.5)', borderRadius: 5 },
+      { label: 'CTD', data: data.map(d=>d.ctd/1e6), backgroundColor: data.map(d=>d.ctd>d.budget?'rgba(255,107,107,0.7)':'rgba(245,166,35,0.7)'), borderRadius: 5 }
+    ]},
+    options: { ...baseOpts(), plugins: { legend: { labels: { color: d2.color, font:{family:'DM Sans',size:11} } }, tooltip: { callbacks: { label: ctx => ` SAR ${ctx.raw.toFixed(2)}M` } } } }
+  });
+
+  if(window._ch_bud_overrun) window._ch_bud_overrun.destroy();
+  window._ch_bud_overrun = new Chart(document.getElementById('ch-bud-overrun'), {
+    type: 'bar',
+    data: { labels, datasets: [
+      { label: 'Revised Value', data: data.map(d=>d.revised/1e6), backgroundColor: 'rgba(0,201,167,0.4)', borderRadius: 5 },
+      { label: 'CAC', data: data.map(d=>d.cac/1e6), backgroundColor: data.map(d=>d.cac>d.revised?'rgba(255,107,107,0.7)':'rgba(245,166,35,0.5)'), borderRadius: 5 }
+    ]},
+    options: { ...baseOpts(), indexAxis:'y', plugins: { legend: { labels: { color: d2.color, font:{family:'DM Sans',size:11} } }, tooltip: { callbacks: { label: ctx => ` SAR ${ctx.raw.toFixed(2)}M` } } } }
+  });
+}
+function renderBudgetTable() {
+  const data = getFilteredBudget();
+  const tb = document.getElementById('bud-tbody'); if(!tb) return;
+  tb.innerHTML = data.map(d => {
+    const mbClass = d.margin < 0 ? 'mb-red' : d.margin <= 15 ? 'mb-amber' : 'mb-green';
+    return `<tr>
+      <td>${d.name}</td>
+      <td><span class="chip" style="background:rgba(0,201,167,.1);color:var(--teal);font-size:10px">${d.group.toUpperCase()}</span></td>
+      <td>${fmt(d.orig)}</td>
+      <td>${fmt(d.revised)}</td>
+      <td>${fmt(d.budget)}</td>
+      <td style="color:${d.ctd>d.budget?'var(--coral)':'var(--teal)'}">${fmt(d.ctd)}</td>
+      <td style="color:${d.cac>d.revised?'var(--coral)':'var(--text)'}">${fmt(d.cac)}</td>
+      <td><span class="margin-badge ${mbClass}">${fmtPct(d.margin)}</span></td>
+    </tr>`;
+  }).join('');
+}
+function filterBudget() { renderBudgetTable(); renderBudgetCharts(); }
+function resetBudget() { document.getElementById('bud-group').value='all'; document.getElementById('bud-margin').value='all'; filterBudget(); }
+
+// ====== LEDGER ======
+let ledFilter = 'all';
+function initLedger() {
+  renderLedger();
+  renderLedgerCharts();
+}
+function getFilteredLedger() {
+  let d = [...ledgerData];
+  if(ledFilter==='profit') d = d.filter(x=>(x.rev-x.cost)>=0);
+  if(ledFilter==='loss') d = d.filter(x=>(x.rev-x.cost)<0);
+  const min = parseFloat(document.getElementById('led-min')?.value)||0;
+  const search = (document.getElementById('led-search')?.value||'').toLowerCase();
+  d = d.filter(x=>x.rev>=min);
+  if(search) d = d.filter(x=>x.name.toLowerCase().includes(search));
+  return d;
+}
+function renderLedger() {
+  const data = getFilteredLedger();
+  const tb = document.getElementById('led-tbody'); if(!tb) return;
+  tb.innerHTML = data.map(d => {
+    const net = d.rev - d.cost;
+    const margin = d.rev > 0 ? (net/d.rev*100).toFixed(1) : '0.0';
+    const netColor = net >= 0 ? 'var(--teal)' : 'var(--coral)';
+    return `<tr>
+      <td>${d.name}</td>
+      <td>${fmt(d.rev)}</td>
+      <td>${fmt(d.cost)}</td>
+      <td style="color:${netColor};font-weight:700">${net>=0?'+':''} ${fmt(net)}</td>
+      <td><span class="margin-badge ${margin>15?'mb-green':margin>0?'mb-amber':'mb-red'}">${margin}%</span></td>
+    </tr>`;
+  }).join('');
+}
+function renderLedgerCharts() {
+  const data = [...ledgerData].sort((a,b)=>(b.rev-b.cost)-(a.rev-a.cost)).slice(0,18);
+  const labels = data.map(d=>d.name.length>16?d.name.slice(0,15)+'…':d.name);
+  const nets = data.map(d=>d.rev-d.cost);
+  const d2 = chartDefaults();
+
+  if(window._ch_led_div) window._ch_led_div.destroy();
+  window._ch_led_div = new Chart(document.getElementById('ch-led-div'), {
+    type: 'bar',
+    data: { labels, datasets: [{ label: 'Net P/L', data: nets.map(v=>v/1e6), backgroundColor: nets.map(v=>v>=0?'rgba(0,201,167,0.7)':'rgba(255,107,107,0.7)'), borderRadius: 5 }] },
+    options: { ...baseOpts({ noScales:false }), indexAxis:'y', plugins: { legend: {display:false}, tooltip: { callbacks: { label: ctx => ` SAR ${(ctx.raw*1e6).toLocaleString()}` } } } }
+  });
+
+  // Pie by client group
+  if(window._ch_led_pie) window._ch_led_pie.destroy();
+  window._ch_led_pie = new Chart(document.getElementById('ch-led-pie'), {
+    type: 'pie',
+    data: {
+      labels: ['Al Urubah','KAP','MBC','MBL','Aramco','Others'],
+      datasets: [{ data: [38.05,12.55,18.08,7.28,5.26,3.58], backgroundColor: ['#00C9A7','#F5A623','#FF6B6B','#9b7fe8','#4ecdc4','#44aadd'], borderWidth: 2, borderColor: isDark()?'#0f2034':'#fff' }]
+    },
+    options: { ...baseOpts({noScales:true}), plugins: { legend: { position:'right', labels: { color: d2.color, font:{family:'DM Sans',size:11} } }, tooltip: { callbacks: { label: ctx => ` SAR ${ctx.raw}M` } } } }
+  });
+}
+function resetLedger() { ledFilter='all'; document.querySelectorAll('#led-chips .chip').forEach((c,i)=>c.classList.toggle('active',i===0)); document.getElementById('led-min').value=''; document.getElementById('led-search').value=''; renderLedger(); }
+
+// ====== CLIENT COLLECTION ======
+function initClientCol() {
+  renderClientCol();
+  renderLollipop(clientColData);
+  renderFunnel();
+}
+function getFilteredClientCol() {
+  let d = [...clientColData];
+  const minV = parseFloat(document.getElementById('cc-min')?.value)||0;
+  const maxV = parseFloat(document.getElementById('cc-max')?.value)||100;
+  const search = (document.getElementById('cc-search')?.value||'').toLowerCase();
+  const sort = document.getElementById('cc-sort')?.value||'pct';
+  d = d.filter(x=>x.pct>=minV && x.pct<=maxV);
+  if(search) d = d.filter(x=>x.client.toLowerCase().includes(search));
+  if(sort==='pct') d.sort((a,b)=>b.pct-a.pct);
+  if(sort==='certified') d.sort((a,b)=>b.certified-a.certified);
+  if(sort==='outstanding') d.sort((a,b)=>(b.certified-b.receipts)-(a.certified-a.receipts));
+  return d;
+}
+function renderClientCol() {
+  const data = getFilteredClientCol();
+  const tb = document.getElementById('cc-tbody'); if(!tb) return;
+  tb.innerHTML = data.map(d => {
+    const out = d.certified - d.receipts;
+    const status = d.pct===0?'<span class="margin-badge mb-red">Zero</span>':d.pct>=80?'<span class="margin-badge mb-green">Healthy</span>':d.pct>=50?'<span class="margin-badge mb-amber">Partial</span>':'<span class="margin-badge mb-red">At Risk</span>';
+    return `<tr>
+      <td><strong>${d.client}</strong></td>
+      <td>${fmt(d.certified)}</td>
+      <td style="color:var(--teal)">${fmt(d.receipts)}</td>
+      <td style="color:${out>1e6?'var(--coral)':'var(--text)'}">${fmt(out)}</td>
+      <td><div class="progress-cell"><div class="prog-bar-bg"><div class="prog-bar-fill" style="width:${Math.min(d.pct,100)}%;background:${progressColor(d.pct)}"></div></div><span style="font-size:11px;font-weight:700">${fmtPct(d.pct)}</span></div></td>
+      <td>${status}</td>
+    </tr>`;
+  }).join('');
+
+  const labels = data.map(d=>d.client);
+  const d2 = chartDefaults();
+  if(window._ch_cc_stacked) window._ch_cc_stacked.destroy();
+  window._ch_cc_stacked = new Chart(document.getElementById('ch-cc-stacked'), {
+    type: 'bar',
+    data: { labels, datasets: [
+      { label: 'Collected', data: data.map(d=>d.receipts/1e6), backgroundColor:'rgba(0,201,167,0.7)', borderRadius:4, stack:'a' },
+      { label: 'Outstanding', data: data.map(d=>(d.certified-d.receipts)/1e6), backgroundColor:'rgba(255,107,107,0.6)', borderRadius:4, stack:'a' }
+    ]},
+    options: { ...baseOpts(), plugins: { legend: { labels: { color:d2.color, font:{family:'DM Sans',size:11} } }, tooltip: { callbacks: { label: ctx => ` SAR ${ctx.raw.toFixed(2)}M` } } } }
+  });
+  renderLollipop(data);
+}
+function renderLollipop(data) {
+  const sorted = [...data].sort((a,b)=>b.pct-a.pct);
+  const avg = 50.88;
+  const container = document.getElementById('ch-cc-lollipop'); if(!container) return;
+  container.innerHTML = sorted.map(d => {
+    const pct = Math.min(d.pct, 100);
+    const color = progressColor(d.pct);
+    return `<div class="lollipop-item">
+      <div class="lollipop-label">${d.client}</div>
+      <div class="lollipop-track" style="flex:1">
+        <div class="lollipop-line" style="width:${pct}%;background:${color}"></div>
+        <div class="lollipop-dot" style="background:${color};right:${100-pct}%;position:absolute;right:auto;left:calc(${pct}% - 5px)"></div>
+        <div style="position:absolute;left:${avg}%;top:-8px;width:2px;height:26px;background:var(--gold);opacity:.7"></div>
+      </div>
+      <div class="lollipop-val">${fmtPct(d.pct)}</div>
+    </div>`;
+  }).join('');
+}
+function renderFunnel() {
+  const container = document.getElementById('ch-cc-funnel'); if(!container) return;
+  const steps = [
+    { label:'Total Contracted', val:119.34, pct:100, color:'#00C9A7' },
+    { label:'Total Certified', val:66.77, pct:56, color:'#F5A623' },
+    { label:'Total Collected', val:33.97, pct:28.5, color:'#FF6B6B' },
+  ];
+  container.innerHTML = steps.map(s => `
+    <div class="funnel-item">
+      <div class="funnel-label">${s.label}</div>
+      <div class="funnel-bar-bg"><div class="funnel-bar-fill" style="width:${s.pct}%;background:${s.color}">SAR ${s.val}M</div></div>
+      <div class="funnel-val">${s.pct}%</div>
+    </div>`).join('');
+}
+function resetClientCol() { document.getElementById('cc-min').value=''; document.getElementById('cc-max').value=''; document.getElementById('cc-sort').value='pct'; document.getElementById('cc-search').value=''; renderClientCol(); }
+
+// ====== PROJECT COLLECTION ======
+let pcFilter = 'all';
+function initProjCol() { renderProjCol(); renderProjColCharts(); }
+function getFilteredProjCol() {
+  let d = [...projColData];
+  if(pcFilter!=='all') d = d.filter(x=>x.code===pcFilter);
+  const health = document.getElementById('pc-health')?.value||'all';
+  const search = (document.getElementById('pc-search')?.value||'').toLowerCase();
+  if(health==='zero') d = d.filter(x=>x.pct===0);
+  if(health==='low') d = d.filter(x=>x.pct<50);
+  if(health==='mid') d = d.filter(x=>x.pct>=50&&x.pct<=100);
+  if(health==='full') d = d.filter(x=>x.pct>100);
+  if(search) d = d.filter(x=>x.name.toLowerCase().includes(search));
+  return d;
+}
+function renderProjColCharts() {
+  const sorted = [...projColData].sort((a,b)=>(b.orig-b.receipts)-(a.orig-a.receipts)).slice(0,10);
+  const top12 = [...projColData].sort((a,b)=>b.orig-a.orig).slice(0,12);
+  const d2 = chartDefaults();
+
+  if(window._ch_pc_outstanding) window._ch_pc_outstanding.destroy();
+  window._ch_pc_outstanding = new Chart(document.getElementById('ch-pc-outstanding'), {
+    type: 'bar',
+    data: { labels: sorted.map(d=>d.name.slice(0,18)), datasets: [{ label:'Outstanding', data: sorted.map(d=>(d.orig-d.receipts)/1e6), backgroundColor:'rgba(255,107,107,0.7)', borderRadius:6 }] },
+    options: { ...baseOpts({noScales:false}), indexAxis:'y', plugins: { legend:{display:false}, tooltip:{ callbacks:{ label: ctx => ` SAR ${ctx.raw.toFixed(2)}M` } } } }
+  });
+
+  if(window._ch_pc_stacked) window._ch_pc_stacked.destroy();
+  window._ch_pc_stacked = new Chart(document.getElementById('ch-pc-stacked'), {
+    type: 'bar',
+    data: { labels: top12.map(d=>d.name.slice(0,14)), datasets: [
+      { label:'Receipts', data: top12.map(d=>d.receipts/1e6), backgroundColor:'rgba(0,201,167,0.7)', borderRadius:4, stack:'a' },
+      { label:'Gap', data: top12.map(d=>(d.orig-d.receipts)/1e6), backgroundColor:'rgba(255,107,107,0.5)', borderRadius:4, stack:'a' }
+    ]},
+    options: { ...baseOpts(), plugins: { legend:{ labels:{ color:d2.color, font:{family:'DM Sans',size:11} } }, tooltip:{ callbacks:{ label: ctx => ` SAR ${ctx.raw.toFixed(2)}M` } } } }
+  });
+}
+function renderProjCol() {
+  const data = getFilteredProjCol();
+  const tb = document.getElementById('pc-tbody'); if(!tb) return;
+  tb.innerHTML = data.map(d => {
+    const out = d.orig - d.receipts;
+    return `<tr>
+      <td>${d.name}</td>
+      <td><span class="chip" style="background:rgba(0,201,167,.1);color:var(--teal);font-size:10px">${d.code}</span></td>
+      <td>${fmt(d.orig)}</td>
+      <td style="color:var(--teal)">${fmt(d.receipts)}</td>
+      <td style="color:${out>1e6?'var(--coral)':'var(--text)'}">${fmt(out)}</td>
+      <td><div class="progress-cell"><div class="prog-bar-bg"><div class="prog-bar-fill" style="width:${Math.min(d.pct,100)}%;background:${progressColor(d.pct)}"></div></div><span style="font-size:11px;font-weight:700">${fmtPct(d.pct)}</span></div></td>
+    </tr>`;
+  }).join('');
+}
+function resetProjCol() { pcFilter='all'; document.querySelectorAll('#pc-chips .chip').forEach((c,i)=>c.classList.toggle('active',i===0)); document.getElementById('pc-health').value='all'; document.getElementById('pc-search').value=''; renderProjCol(); }
+
+// ====== OVERDUE ======
+function initOverdue() { renderOverdue(); renderOverdueCharts(); }
+function getFilteredOverdue() {
+  let d = [...overdueData];
+  const cl = document.getElementById('od-client')?.value||'all';
+  const pm = document.getElementById('od-pm')?.value||'all';
+  const minD = parseFloat(document.getElementById('od-mindays')?.value)||0;
+  const minS = parseFloat(document.getElementById('od-minsam')?.value)||0;
+  if(cl!=='all') d = d.filter(x=>x.client===cl);
+  if(pm!=='all') d = d.filter(x=>x.pm===pm);
+  d = d.filter(x=>x.days>=minD && x.overdue>=minS);
+  return d.sort((a,b)=>b.days-a.days);
+}
+function renderOverdue() {
+  const data = getFilteredOverdue();
+  const tb = document.getElementById('od-tbody'); if(!tb) return;
+  tb.innerHTML = data.map(d => `<tr style="background:${odRowColor(d.days)}">
+    <td>${d.sl}</td>
+    <td>${d.client}</td>
+    <td>${d.project}</td>
+    <td><span class="chip" style="background:rgba(0,201,167,.1);color:var(--teal);font-size:10px">${d.pm}</span></td>
+    <td style="font-size:11px;color:var(--text3)">${d.ref}</td>
+    <td>${fmt(d.total)}</td>
+    <td style="font-weight:700;color:var(--coral)">${fmt(d.overdue)}</td>
+    <td>${overdueBadge(d.days)}</td>
+  </tr>`).join('');
+}
+function renderOverdueCharts() {
+  const d2 = chartDefaults();
+  // By client
+  const byClient = {};
+  overdueData.forEach(d => { byClient[d.client] = (byClient[d.client]||0) + d.overdue; });
+  const clientEntries = Object.entries(byClient).sort((a,b)=>b[1]-a[1]);
+
+  if(window._ch_od_client) window._ch_od_client.destroy();
+  window._ch_od_client = new Chart(document.getElementById('ch-od-client'), {
+    type: 'bar',
+    data: { labels: clientEntries.map(e=>e[0]), datasets: [{ label:'Overdue', data: clientEntries.map(e=>e[1]/1e6), backgroundColor: clientEntries.map((_,i)=>i===0?'rgba(255,107,107,0.8)':'rgba(245,166,35,0.7)'), borderRadius:6 }] },
+    options: { ...baseOpts({noScales:false}), indexAxis:'y', plugins: { legend:{display:false}, tooltip:{ callbacks:{ label: ctx => ` SAR ${(ctx.raw*1e6).toLocaleString()}` } } } }
+  });
+
+  // By PM
+  const byPM = {};
+  overdueData.forEach(d => { byPM[d.pm] = (byPM[d.pm]||0) + d.overdue; });
+  const pmEntries = Object.entries(byPM).sort((a,b)=>b[1]-a[1]);
+
+  if(window._ch_od_pm) window._ch_od_pm.destroy();
+  window._ch_od_pm = new Chart(document.getElementById('ch-od-pm'), {
+    type: 'bar',
+    data: { labels: pmEntries.map(e=>e[0]), datasets: [{ label:'Overdue by PM', data: pmEntries.map(e=>e[1]/1e6), backgroundColor: ['rgba(255,107,107,0.8)','rgba(245,166,35,0.7)','rgba(0,201,167,0.6)','rgba(155,127,232,0.7)'], borderRadius:6 }] },
+    options: { ...baseOpts(), plugins: { legend:{display:false}, tooltip:{ callbacks:{ label: ctx => ` SAR ${(ctx.raw*1e6).toLocaleString()}` } } } }
+  });
+}
+function resetOverdue() { document.getElementById('od-client').value='all'; document.getElementById('od-pm').value='all'; document.getElementById('od-mindays').value=''; document.getElementById('od-minsam').value=''; renderOverdue(); }
+
+// ====== TABLE SORT ======
+const sortState = {};
+function sortTable(tableId, colIdx) {
+  const table = document.getElementById(tableId);
+  if(!table) return;
+  const tbody = table.querySelector('tbody');
+  const rows = Array.from(tbody.querySelectorAll('tr'));
+  const key = tableId + '_' + colIdx;
+  sortState[key] = !sortState[key];
+  const asc = sortState[key];
+  rows.sort((a, b) => {
+    const aT = a.cells[colIdx]?.textContent.replace(/[^0-9.\-]/g,'') || '';
+    const bT = b.cells[colIdx]?.textContent.replace(/[^0-9.\-]/g,'') || '';
+    const aV = isNaN(aT) ? (a.cells[colIdx]?.textContent||'') : parseFloat(aT);
+    const bV = isNaN(bT) ? (b.cells[colIdx]?.textContent||'') : parseFloat(bT);
+    if(typeof aV === 'string') return asc ? aV.localeCompare(bV) : bV.localeCompare(aV);
+    return asc ? aV - bV : bV - aV;
+  });
+  rows.forEach(r => tbody.appendChild(r));
+}
+
+// ====== INIT ======
+window.addEventListener('DOMContentLoaded', () => {
+  initOverview();
+  window._ovInit = true;
+  renderProgressTable();
+  window._prInit = false; // Will re-render charts on nav
+  // But need to preload table
+  renderBudgetTable();
+  renderLedger();
+  renderProjCol();
+  renderOverdue();
+});
+</script>
+</body>
+</html>
