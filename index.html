@@ -325,9 +325,9 @@ tr:last-child td{border-bottom:none}
     <button class="reset-btn" onclick="resetOverview()">↺ Reset</button>
   </div>
   <div class="kpi-row">
-    <div class="kpi-card teal"><div class="kpi-label">Total Portfolio Value</div><div class="kpi-value">SAR 119.34M</div><div class="kpi-sub">14 active projects</div><div class="kpi-icon">🏗️</div></div>
+    <div class="kpi-card teal"><div class="kpi-label">Total Portfolio Value</div><div class="kpi-value">SAR 120.80M</div><div class="kpi-sub">14 active projects</div><div class="kpi-icon">🏗️</div></div>
     <div class="kpi-card gold"><div class="kpi-label">Total Certified</div><div class="kpi-value">SAR 66.77M</div><div class="kpi-sub">55.95% of portfolio</div><div class="kpi-icon">✅</div></div>
-    <div class="kpi-card teal"><div class="kpi-label">Total Collected</div><div class="kpi-value">SAR 33.97M</div><div class="kpi-sub">50.88% of certified</div><div class="kpi-icon">💵</div></div>
+    <div class="kpi-card teal"><div class="kpi-label">Total Collected</div><div class="kpi-value">SAR 36.97M</div><div class="kpi-sub">50.88% of certified</div><div class="kpi-icon">💵</div></div>
     <div class="kpi-card gold"><div class="kpi-label">Collection Rate</div><div class="kpi-value">50.88%</div><div class="kpi-sub">Target: 75%+</div><div class="kpi-icon">📈</div></div>
     <div class="kpi-card coral"><div class="kpi-label">Total Overdue</div><div class="kpi-value">SAR 7.29M</div><div class="kpi-sub">7 invoices >90 days</div><div class="kpi-icon">🚨</div></div>
     <div class="kpi-card purple"><div class="kpi-label">Active Projects</div><div class="kpi-value">14</div><div class="kpi-sub">SAR 119.34M total</div><div class="kpi-icon">📋</div></div>
@@ -362,29 +362,29 @@ tr:last-child td{border-bottom:none}
     <div class="alert-panel">
       <div class="chart-title" style="margin-bottom:14px">🚨 Top Overdue Invoices</div>
       <div class="alert-item">
+        <div class="alert-badge od-red">25 days</div>
+        <div class="alert-name">Al Yamama	Water Features -	ANIL</div>
+        <div class="alert-amount">SAR 1,822,569</div>
+      </div>
+      <div class="alert-item">
+        <div class="alert-badge od-red">13 days</div>
+        <div class="alert-name">MBC Infrastructure Project-ANIL</div>
+        <div class="alert-amount">SAR 1,722,610</div>
+      </div>
+      <div class="alert-item">
         <div class="alert-badge od-red">136 days</div>
-        <div class="alert-name">Lulu Saudi — BALA</div>
+        <div class="alert-name">Lulu Saudi-Multiple Invoices</div>
         <div class="alert-amount">SAR 686,323</div>
-      </div>
-      <div class="alert-item">
-        <div class="alert-badge od-red">124 days</div>
-        <div class="alert-name">Elegancia Hotel West — ANIL</div>
-        <div class="alert-amount">SAR 23,771</div>
-      </div>
-      <div class="alert-item">
-        <div class="alert-badge od-red">98 days</div>
-        <div class="alert-name">Al Yamama Garden Blvd — ANIL</div>
-        <div class="alert-amount">SAR 406,741</div>
-      </div>
-      <div class="alert-item">
-        <div class="alert-badge od-red">96 days</div>
-        <div class="alert-name">Almabani Sports Pitchmastic — BALA</div>
-        <div class="alert-amount">SAR 116,675</div>
       </div>
       <div class="alert-item">
         <div class="alert-badge od-amber">73 days</div>
         <div class="alert-name">Al Yamama Plumbing — ANIL</div>
         <div class="alert-amount">SAR 516,801</div>
+      </div>
+      <div class="alert-item">
+        <div class="alert-badge od-red">25 days</div>
+        <div class="alert-name">Al Yamama	Kiosk Structural-ANIL</div>
+        <div class="alert-amount">SAR 457,221</div>
       </div>
     </div>
   </div>
@@ -884,86 +884,198 @@ const ledgerData = [
   {name:'Yamama Palace Fence & Gate',rev:829337.74,cost:-12629.74}
 ];
 
+// const clientColData = [
+//   {client:'Al Arabia',certified:61181,receipts:61181,pct:100},
+//   {client:'Al Fahd',certified:1866000,receipts:1844078,pct:98.78},
+//   {client:'Al Fanar',certified:4488063,receipts:2781499,pct:61.98},
+//   {client:'Al Futtaim',certified:188313,receipts:63342,pct:33.64},
+//   {client:'Al Nahda',certified:3355259,receipts:783353,pct:23.35},
+//   {client:'Al Yamama',certified:28100000,receipts:0,pct:0},
+//   {client:'Almabani',certified:6318487,receipts:1160496,pct:18.37},
+//   {client:'Aramco',certified:5260000,receipts:3673112,pct:69.82},
+//   {client:'Elegancia',certified:303450,receipts:0,pct:0},
+//   {client:'KAP',certified:17137809,receipts:5531606,pct:32.28},
+//   {client:'MBC',certified:13713331,receipts:11856282,pct:86.46},
+//   {client:'MBL',certified:7277438,receipts:6946100,pct:95.44},
+//   {client:'QTC',certified:25550,receipts:25550,pct:100},
+//   {client:'Greenshore',certified:76924,receipts:68000,pct:88.4},
+//   {client:'Lulu',certified:686323,receipts:0,pct:0},
+//   {client:'FGC',certified:138730,receipts:0,pct:0},
+// ];
+
 const clientColData = [
-  {client:'Al Arabia',certified:61181,receipts:61181,pct:100},
-  {client:'Al Fahd',certified:1866000,receipts:1844078,pct:98.78},
-  {client:'Al Fanar',certified:4488063,receipts:2781499,pct:61.98},
-  {client:'Al Futtaim',certified:188313,receipts:63342,pct:33.64},
-  {client:'Al Nahda',certified:3355259,receipts:783353,pct:23.35},
-  {client:'Al Yamama',certified:28100000,receipts:0,pct:0},
-  {client:'Almabani',certified:6318487,receipts:1160496,pct:18.37},
-  {client:'Aramco',certified:5260000,receipts:3673112,pct:69.82},
-  {client:'Elegancia',certified:303450,receipts:0,pct:0},
-  {client:'KAP',certified:17137809,receipts:5531606,pct:32.28},
-  {client:'MBC',certified:13713331,receipts:11856282,pct:86.46},
-  {client:'MBL',certified:7277438,receipts:6946100,pct:95.44},
-  {client:'QTC',certified:25550,receipts:25550,pct:100},
-  {client:'Greenshore',certified:76924,receipts:68000,pct:88.4},
-  {client:'Lulu',certified:686323,receipts:0,pct:0},
-  {client:'FGC',certified:138730,receipts:0,pct:0},
+  { client: 'Al Arabia', certified: 61181.40, receipts: 70358.61, pct: 115 },
+  { client: 'Al Fahd', certified: 1871005.43, receipts: 466500.00, pct: 25 },
+  { client: 'Al Fanar', certified: 4561148.43, receipts: 387982.72, pct: 9 },
+  { client: 'Al Futtaim', certified: 188313.00, receipts: 17526.23, pct: 9 },
+  { client: 'Al Nahda', certified: 3355259.00, receipts: 164966.93, pct: 5 },
+  { client: 'Al Urubah', certified: 45228788.24, receipts: 3937825.89, pct: 9 },
+  { client: 'Al Yamama', certified: 6556250.82, receipts: 0.00, pct: 0 },
+  { client: 'Aramco', certified: 21941603.88, receipts: 14638217.46, pct: 67 },
+  { client: 'Elegancia', certified: 303450.00, receipts: 0.00, pct: 0 },
+  { client: 'Embassy Of Switzerland', certified: 485834.98, receipts: 0.00, pct: 0 },
+  { client: 'Equipment Rental', certified: 8000.00, receipts: 9200.00, pct: 115 },
+  { client: 'FGC Termination', certified: 138730.00, receipts: 57442.50, pct: 41 },
+  { client: 'GCCIA', certified: 1538691.57, receipts: 322956.29, pct: 21 },
+  { client: 'Geotechnical', certified: 385116.00, receipts: 55656.63, pct: 14 },
+  { client: 'KAP', certified: 12818524.35, receipts: 1998597.07, pct: 16 },
+  { client: 'MBC', certified: 13713330.50, receipts: 11518437.54, pct: 84 },
+  { client: 'Sports Boulevard', certified: 6171089.26, receipts: 553647.95, pct: 9 },
+  { client: 'Tree Gate', certified: 13750.00, receipts: 0.00, pct: 0 }
 ];
+
+// const projColData = [
+//   {name:'Al Urubah – Fire Fighting',code:'101CD',orig:9430000,receipts:0,pct:0},
+//   {name:'Al Urubah – Garden Blvd',code:'101MF',orig:7475000,receipts:0,pct:0},
+//   {name:'Al Urubah – Visitors Bldg',code:'101MP',orig:4715000,receipts:0,pct:0},
+//   {name:'Al Urubah – Kiosk',code:'101CD',orig:1380000,receipts:0,pct:0},
+//   {name:'Al Urubah – Plumbing',code:'101MF',orig:4370000,receipts:0,pct:0},
+//   {name:'Al Urubah – Waterfeatures',code:'101MP',orig:10580000,receipts:0,pct:0},
+//   {name:'KAP – Demolition',code:'101SD',orig:2070000,receipts:690000,pct:33.3},
+//   {name:'KAP – Finishing',code:'101SD',orig:3680000,receipts:1180000,pct:32.1},
+//   {name:'KAP – Primary Culvert',code:'101CD',orig:2875000,receipts:960000,pct:33.4},
+//   {name:'KAP – Retail Building',code:'101SD',orig:1840000,receipts:580000,pct:31.5},
+//   {name:'KAP – Secondary Culvert',code:'101MP',orig:2185000,receipts:720000,pct:32.9},
+//   {name:'MBC Media (Main)',code:'101MF',orig:13713331,receipts:11856282,pct:86.5},
+//   {name:'MBC Infrastructure',code:'101MP',orig:4370000,receipts:3800000,pct:87.0},
+//   {name:'Hotel West – Elegancia',code:'101CD',orig:303450,receipts:0,pct:0},
+//   {name:'Sports Blvd – Pitchmastic',code:'101SD',orig:3680000,receipts:680000,pct:18.5},
+//   {name:'Sports Blvd – Linear Shade',code:'101MF',orig:2415000,receipts:440000,pct:18.2},
+//   {name:'Al Nahda – Shapoorji',code:'101CD',orig:3858548,receipts:783353,pct:20.3},
+//   {name:'Al Arabia Snag',code:'101MP',orig:61181,receipts:61181,pct:100},
+//   {name:'Al Fanar',code:'101MF',orig:4488063,receipts:2781499,pct:62.0},
+//   {name:'DB Dressing',code:'101CD',orig:188313,receipts:63342,pct:33.6},
+//   {name:'Public Park Water',code:'101SD',orig:1866000,receipts:1844078,pct:98.8},
+//   {name:'Qiddiya HDG',code:'101MF',orig:76924,receipts:68000,pct:88.4},
+//   {name:'FGC Termination',code:'101MP',orig:138730,receipts:0,pct:0},
+//   {name:'Yamama Palace – MBL',code:'101SD',orig:7277438,receipts:6946100,pct:95.4},
+//   {name:'Qiddiya Tennis – QTC',code:'101CD',orig:25550,receipts:25550,pct:100},
+// ];
 
 const projColData = [
-  {name:'Al Urubah – Fire Fighting',code:'101CD',orig:9430000,receipts:0,pct:0},
-  {name:'Al Urubah – Garden Blvd',code:'101MF',orig:7475000,receipts:0,pct:0},
-  {name:'Al Urubah – Visitors Bldg',code:'101MP',orig:4715000,receipts:0,pct:0},
-  {name:'Al Urubah – Kiosk',code:'101CD',orig:1380000,receipts:0,pct:0},
-  {name:'Al Urubah – Plumbing',code:'101MF',orig:4370000,receipts:0,pct:0},
-  {name:'Al Urubah – Waterfeatures',code:'101MP',orig:10580000,receipts:0,pct:0},
-  {name:'KAP – Demolition',code:'101SD',orig:2070000,receipts:690000,pct:33.3},
-  {name:'KAP – Finishing',code:'101SD',orig:3680000,receipts:1180000,pct:32.1},
-  {name:'KAP – Primary Culvert',code:'101CD',orig:2875000,receipts:960000,pct:33.4},
-  {name:'KAP – Retail Building',code:'101SD',orig:1840000,receipts:580000,pct:31.5},
-  {name:'KAP – Secondary Culvert',code:'101MP',orig:2185000,receipts:720000,pct:32.9},
-  {name:'MBC Media (Main)',code:'101MF',orig:13713331,receipts:11856282,pct:86.5},
-  {name:'MBC Infrastructure',code:'101MP',orig:4370000,receipts:3800000,pct:87.0},
-  {name:'Hotel West – Elegancia',code:'101CD',orig:303450,receipts:0,pct:0},
-  {name:'Sports Blvd – Pitchmastic',code:'101SD',orig:3680000,receipts:680000,pct:18.5},
-  {name:'Sports Blvd – Linear Shade',code:'101MF',orig:2415000,receipts:440000,pct:18.2},
-  {name:'Al Nahda – Shapoorji',code:'101CD',orig:3858548,receipts:783353,pct:20.3},
-  {name:'Al Arabia Snag',code:'101MP',orig:61181,receipts:61181,pct:100},
-  {name:'Al Fanar',code:'101MF',orig:4488063,receipts:2781499,pct:62.0},
-  {name:'DB Dressing',code:'101CD',orig:188313,receipts:63342,pct:33.6},
-  {name:'Public Park Water',code:'101SD',orig:1866000,receipts:1844078,pct:98.8},
-  {name:'Qiddiya HDG',code:'101MF',orig:76924,receipts:68000,pct:88.4},
-  {name:'FGC Termination',code:'101MP',orig:138730,receipts:0,pct:0},
-  {name:'Yamama Palace – MBL',code:'101SD',orig:7277438,receipts:6946100,pct:95.4},
-  {name:'Qiddiya Tennis – QTC',code:'101CD',orig:25550,receipts:25550,pct:100},
+  { code:'101CD', name:'AL URUBA PARK - Kiosk Structural', orig:3792912.00, receipts:445331.10, pct:12 },
+  { code:'101CD', name:'AL URUBA PARK - Plumbing and Drainage', orig:10054266.00, receipts:516800.54, pct:5 },
+  { code:'101CD', name:'AL URUBA PARK - Fire Fighting Works at Garden Boulevard', orig:12705522.24, receipts:0, pct:0 },
+  { code:'101CD', name:'AL URUBA PARK - Fire Fighting Works at Visitors Building', orig:2733809.00, receipts:0, pct:0 },
+  { code:'101CD', name:'AL URUBA PARK - Supply and installation of Waterfeatures', orig:15848429.00, receipts:2925094.25, pct:18 },
+
+  { code:'101CD', name:'KAP PRIMARY CULVERT', orig:3514609.78, receipts:0, pct:0 },
+  { code:'101CD', name:'KAP SECONDARY CULVERT', orig:2123915.00, receipts:582532.74, pct:27 },
+  { code:'101CD', name:'KAP DEMOLITION', orig:93984.00, receipts:0, pct:0 },
+  { code:'101CD', name:'KAP FINISHING WORK', orig:287970.00, receipts:185751.08, pct:65 },
+  { code:'101CD', name:'KAP RETAIL BUILDING', orig:6485017.57, receipts:1230313.25, pct:19 },
+  { code:'101CD', name:'KAP TECHNICAL BUILDING', orig:313028.00, receipts:0, pct:0 },
+
+  { code:'101CD', name:'MBC-001-MBC Infrastructure Project', orig:6671521.00, receipts:4384677.52, pct:66 },
+  { code:'101CD', name:'MBC TCR & MCR', orig:6756863.50, receipts:6913597.12, pct:102 },
+
+  { code:'101CD', name:'Al Fahd - Public Park Water Foundation', orig:1866000.43, receipts:466500.00, pct:25 },
+  { code:'101CD', name:'Sports Boulevard Pitchmastic Waterproofing', orig:2191589.26, receipts:0, pct:0 },
+  { code:'101CD', name:'Al Urubah Park - Puddle Flange', orig:44000.00, receipts:50600.00, pct:115 },
+  { code:'101CD', name:'Al Arabia Snag Works', orig:61181.40, receipts:70358.61, pct:115 },
+
+  { code:'101CD', name:'MBC Media - Water Line', orig:25815.00, receipts:0, pct:0 },
+  { code:'101CD', name:'MBC Media - Logo', orig:157860.00, receipts:181539.00, pct:115 },
+  { code:'101CD', name:'MBC Media - Uplink Cable Tray', orig:53131.00, receipts:9873.90, pct:19 },
+  { code:'101CD', name:'MBC Studio Stage 2 & 3', orig:23140.00, receipts:0, pct:0 },
+  { code:'101CD', name:'MBC - Dismantling of GRP Tank and Fire Pump', orig:25000.00, receipts:28750.00, pct:115 },
+
+  { code:'101CD', name:'Tree Grate', orig:13750.00, receipts:0, pct:0 },
+  { code:'101CD', name:'Al Fahad - S/S Floor Drain', orig:5005.00, receipts:0, pct:0 },
+  { code:'101CD', name:'Embassy of Switzerland - Landscape Refurbishment', orig:485834.98, receipts:0, pct:0 },
+  { code:'101CD', name:'Al Urubah - Design Review Addressable Fire Alarm', orig:49850.00, receipts:0, pct:0 },
+  { code:'101CD', name:'Geotechnical Earthworks at King Abdulaziz Park (Landform)', orig:385116.00, receipts:55656.63, pct:14 },
+
+  { code:'101MF', name:'Yamama Palace Fence and Gate', orig:6556250.82, receipts:0, pct:0 },
+  { code:'101MF', name:'Sports Boulevard Linear Shade', orig:3979500.00, receipts:553647.95, pct:14 },
+  { code:'101MF', name:'Al Fanar - HVDC Converter', orig:2412152.27, receipts:226521.04, pct:9 },
+  { code:'101MF', name:'Al Fanar - Embedded Plate', orig:123010.16, receipts:141461.68, pct:115 },
+  { code:'101MF', name:'Qiddiya HDG Bracket', orig:74700.00, receipts:20000.00, pct:27 },
+
+  { code:'101MF', name:'Al Fanar PE319C-135', orig:477950.00, receipts:0, pct:0 },
+  { code:'101MF', name:'Al Fanar PE318C-147', orig:510800.00, receipts:0, pct:0 },
+  { code:'101MF', name:'Al Fanar PE317C-144', orig:449000.00, receipts:0, pct:0 },
+  { code:'101MF', name:'Al Fanar PE316C-137', orig:416350.00, receipts:0, pct:0 },
+  { code:'101MF', name:'Al Fanar PE345C-029', orig:97186.00, receipts:0, pct:0 },
+
+  { code:'101MP', name:'Al Nahda Entertainment Complex - Shapoorji Pallonji', orig:3355259.00, receipts:164966.93, pct:5 },
+  { code:'101MP', name:'Hotel West 03 Shura Island - Elegancia', orig:114510.00, receipts:0, pct:0 },
+  { code:'101MP', name:'Elegancia - Hotel West DB Works', orig:188940.00, receipts:0, pct:0 },
+  { code:'101MP', name:'Al Futtaim Engineering - DB Dressing', orig:188313.00, receipts:17526.23, pct:9 },
+  { code:'101MP', name:'FGC Termination and Cladding', orig:138730.00, receipts:57442.50, pct:41 },
+
+  { code:'101SD', name:'ARAMCO - Southern Area Pipeline Dept - Sand Control', orig:1500604.16, receipts:0, pct:0 },
+  { code:'101SD', name:'ARAMCO - Northern Area Pipeline Dept', orig:1471511.35, receipts:1401193.57, pct:95 },
+  { code:'101SD', name:'ARAMCO - UR Well Completion - Gaswell', orig:16074896.00, receipts:10714631.01, pct:67 },
+  { code:'101SD', name:'ARAMCO - Manifa Producing Dept', orig:2894592.37, receipts:2522392.88, pct:87 },
+  { code:'101SD', name:'GCC Interconnection Authority', orig:1538691.57, receipts:322956.29, pct:21 },
+  { code:'101SD', name:'Service Division - Equipment Rental', orig:8000.00, receipts:9200.00, pct:115 }
 ];
+// const overdueData = [
+//   {sl:1,client:'Lulu',project:'Lulu Saudi',pm:'BALA',ref:'INV-2025-089',total:686322.56,overdue:686322.56,days:136},
+//   {sl:2,client:'Elegancia',project:'Hotel West',pm:'ANIL',ref:'INV-2025-112',total:23770.51,overdue:23770.51,days:124},
+//   {sl:3,client:'Al Yamama',project:'Garden Blvd',pm:'ANIL',ref:'INV-2026-001',total:406740.66,overdue:406740.66,days:98},
+//   {sl:4,client:'Almabani',project:'Sports Pitchmastic',pm:'BALA',ref:'INV-2026-003',total:116674.52,overdue:116674.52,days:96},
+//   {sl:5,client:'Al Yamama',project:'Plumbing',pm:'ANIL',ref:'INV-2026-007',total:516800.54,overdue:516800.54,days:73},
+//   {sl:6,client:'Al Yamama',project:'Waterfeatures',pm:'ANIL',ref:'INV-2026-012',total:1822569,overdue:1822569,days:68},
+//   {sl:7,client:'MBC',project:'MBC Media',pm:'ANIL',ref:'INV-2026-015',total:480000,overdue:480000,days:62},
+//   {sl:8,client:'KAP',project:'Retail Building',pm:'QAIS',ref:'INV-2026-018',total:325000,overdue:325000,days:58},
+//   {sl:9,client:'Al Yamama',project:'Visitors Bldg',pm:'ANIL',ref:'INV-2026-022',total:420000,overdue:420000,days:55},
+//   {sl:10,client:'Al Fanar',project:'Al Fanar',pm:'ABDULLAHLLAH',ref:'INV-2026-025',total:280000,overdue:280000,days:51},
+//   {sl:11,client:'Almabani',project:'Sports Linear',pm:'BALA',ref:'INV-2026-028',total:195000,overdue:195000,days:48},
+//   {sl:12,client:'Al Yamama',project:'Fire Fighting',pm:'ANIL',ref:'INV-2026-031',total:380000,overdue:380000,days:45},
+//   {sl:13,client:'KAP',project:'Primary Culvert',pm:'QAIS',ref:'INV-2026-034',total:220000,overdue:220000,days:42},
+//   {sl:14,client:'Al Nahda',project:'Al Nahda',pm:'BALA',ref:'INV-2026-037',total:165000,overdue:165000,days:40},
+//   {sl:15,client:'MBL',project:'Yamama Palace',pm:'ABDULLAHLLAH',ref:'INV-2026-040',total:310000,overdue:310000,days:38},
+//   {sl:16,client:'Al Yamama',project:'Kiosk',pm:'ANIL',ref:'INV-2026-043',total:145000,overdue:145000,days:35},
+//   {sl:17,client:'KAP',project:'Finishing',pm:'QAIS',ref:'INV-2026-046',total:280000,overdue:280000,days:32},
+//   {sl:18,client:'Al Futtaim',project:'DB Dressing',pm:'BALA',ref:'INV-2026-049',total:63342,overdue:63342,days:30},
+//   {sl:19,client:'Al Yamama',project:'Garden Blvd 2',pm:'ANIL',ref:'INV-2026-052',total:240000,overdue:240000,days:28},
+//   {sl:20,client:'Almabani',project:'Sports Blvd',pm:'BALA',ref:'INV-2026-055',total:180000,overdue:180000,days:25},
+//   {sl:21,client:'KAP',project:'Demolition',pm:'QAIS',ref:'INV-2026-058',total:155000,overdue:155000,days:22},
+//   {sl:22,client:'Al Fanar',project:'Al Fanar B',pm:'ABDULLAHLLAH',ref:'INV-2026-061',total:120000,overdue:120000,days:20},
+//   {sl:23,client:'MBC',project:'MBC Infra',pm:'ANIL',ref:'INV-2026-064',total:95000,overdue:95000,days:18},
+//   {sl:24,client:'Al Yamama',project:'Plumbing B',pm:'ANIL',ref:'INV-2026-067',total:185000,overdue:185000,days:16},
+//   {sl:25,client:'Al Nahda',project:'Al Nahda B',pm:'BALA',ref:'INV-2026-070',total:78000,overdue:78000,days:14},
+//   {sl:26,client:'KAP',project:'Secondary Culvert',pm:'QAIS',ref:'INV-2026-073',total:142000,overdue:142000,days:12},
+//   {sl:27,client:'Al Yamama',project:'Waterfeatures B',pm:'ANIL',ref:'INV-2026-076',total:210000,overdue:210000,days:10},
+//   {sl:28,client:'Almabani',project:'Sports C',pm:'BALA',ref:'INV-2026-079',total:98000,overdue:98000,days:8},
+//   {sl:29,client:'MBL',project:'Yamama B',pm:'ABDULLAHLLAH',ref:'INV-2026-082',total:168000,overdue:168000,days:6},
+//   {sl:30,client:'Al Yamama',project:'Visitors B',pm:'ANIL',ref:'INV-2026-085',total:125000,overdue:125000,days:4},
+//   {sl:31,client:'Al Fanar',project:'Al Fanar C',pm:'ABDULLAHLLAH',ref:'INV-2026-088',total:88000,overdue:88000,days:2},
+//   {sl:32,client:'FGC',project:'FGC Termination',pm:'BALA',ref:'INV-2026-091',total:55000,overdue:55000,days:1},
+// ];
 
 const overdueData = [
-  {sl:1,client:'Lulu',project:'Lulu Saudi',pm:'BALA',ref:'INV-2025-089',total:686322.56,overdue:686322.56,days:136},
-  {sl:2,client:'Elegancia',project:'Hotel West',pm:'ANIL',ref:'INV-2025-112',total:23770.51,overdue:23770.51,days:124},
-  {sl:3,client:'Al Yamama',project:'Garden Blvd',pm:'ANIL',ref:'INV-2026-001',total:406740.66,overdue:406740.66,days:98},
-  {sl:4,client:'Almabani',project:'Sports Pitchmastic',pm:'BALA',ref:'INV-2026-003',total:116674.52,overdue:116674.52,days:96},
-  {sl:5,client:'Al Yamama',project:'Plumbing',pm:'ANIL',ref:'INV-2026-007',total:516800.54,overdue:516800.54,days:73},
-  {sl:6,client:'Al Yamama',project:'Waterfeatures',pm:'ANIL',ref:'INV-2026-012',total:1822569,overdue:1822569,days:68},
-  {sl:7,client:'MBC',project:'MBC Media',pm:'ANIL',ref:'INV-2026-015',total:480000,overdue:480000,days:62},
-  {sl:8,client:'KAP',project:'Retail Building',pm:'QAIS',ref:'INV-2026-018',total:325000,overdue:325000,days:58},
-  {sl:9,client:'Al Yamama',project:'Visitors Bldg',pm:'ANIL',ref:'INV-2026-022',total:420000,overdue:420000,days:55},
-  {sl:10,client:'Al Fanar',project:'Al Fanar',pm:'ABDULLAHLLAH',ref:'INV-2026-025',total:280000,overdue:280000,days:51},
-  {sl:11,client:'Almabani',project:'Sports Linear',pm:'BALA',ref:'INV-2026-028',total:195000,overdue:195000,days:48},
-  {sl:12,client:'Al Yamama',project:'Fire Fighting',pm:'ANIL',ref:'INV-2026-031',total:380000,overdue:380000,days:45},
-  {sl:13,client:'KAP',project:'Primary Culvert',pm:'QAIS',ref:'INV-2026-034',total:220000,overdue:220000,days:42},
-  {sl:14,client:'Al Nahda',project:'Al Nahda',pm:'BALA',ref:'INV-2026-037',total:165000,overdue:165000,days:40},
-  {sl:15,client:'MBL',project:'Yamama Palace',pm:'ABDULLAHLLAH',ref:'INV-2026-040',total:310000,overdue:310000,days:38},
-  {sl:16,client:'Al Yamama',project:'Kiosk',pm:'ANIL',ref:'INV-2026-043',total:145000,overdue:145000,days:35},
-  {sl:17,client:'KAP',project:'Finishing',pm:'QAIS',ref:'INV-2026-046',total:280000,overdue:280000,days:32},
-  {sl:18,client:'Al Futtaim',project:'DB Dressing',pm:'BALA',ref:'INV-2026-049',total:63342,overdue:63342,days:30},
-  {sl:19,client:'Al Yamama',project:'Garden Blvd 2',pm:'ANIL',ref:'INV-2026-052',total:240000,overdue:240000,days:28},
-  {sl:20,client:'Almabani',project:'Sports Blvd',pm:'BALA',ref:'INV-2026-055',total:180000,overdue:180000,days:25},
-  {sl:21,client:'KAP',project:'Demolition',pm:'QAIS',ref:'INV-2026-058',total:155000,overdue:155000,days:22},
-  {sl:22,client:'Al Fanar',project:'Al Fanar B',pm:'ABDULLAHLLAH',ref:'INV-2026-061',total:120000,overdue:120000,days:20},
-  {sl:23,client:'MBC',project:'MBC Infra',pm:'ANIL',ref:'INV-2026-064',total:95000,overdue:95000,days:18},
-  {sl:24,client:'Al Yamama',project:'Plumbing B',pm:'ANIL',ref:'INV-2026-067',total:185000,overdue:185000,days:16},
-  {sl:25,client:'Al Nahda',project:'Al Nahda B',pm:'BALA',ref:'INV-2026-070',total:78000,overdue:78000,days:14},
-  {sl:26,client:'KAP',project:'Secondary Culvert',pm:'QAIS',ref:'INV-2026-073',total:142000,overdue:142000,days:12},
-  {sl:27,client:'Al Yamama',project:'Waterfeatures B',pm:'ANIL',ref:'INV-2026-076',total:210000,overdue:210000,days:10},
-  {sl:28,client:'Almabani',project:'Sports C',pm:'BALA',ref:'INV-2026-079',total:98000,overdue:98000,days:8},
-  {sl:29,client:'MBL',project:'Yamama B',pm:'ABDULLAHLLAH',ref:'INV-2026-082',total:168000,overdue:168000,days:6},
-  {sl:30,client:'Al Yamama',project:'Visitors B',pm:'ANIL',ref:'INV-2026-085',total:125000,overdue:125000,days:4},
-  {sl:31,client:'Al Fanar',project:'Al Fanar C',pm:'ABDULLAHLLAH',ref:'INV-2026-088',total:88000,overdue:88000,days:2},
-  {sl:32,client:'FGC',project:'FGC Termination',pm:'BALA',ref:'INV-2026-091',total:55000,overdue:55000,days:1},
+  { sl: 1, client: 'Lulu Saudi', project: 'Multiple Invoices (Consolidated)', pm: '', ref: 'MULTI', total: 686322.56, overdue: 686322.56, days: 136 },
+
+  { sl: 2, client: 'MBC', project: 'MBC Infrastructure Project', pm: 'ANIL', ref: '101/101CD12/ARCFP/26/04/00001', total: 1722609.53, overdue: 1722609.54, days: 13 },
+  { sl: 3, client: 'MBC', project: 'MBC Uplink Cable Tray', pm: 'ANIL', ref: '101/101CD29/ARCFP/26/04/00001', total: 51226.75, overdue: 51226.76, days: 12 },
+  { sl: 4, client: 'MBC', project: 'MBC Water Line', pm: 'ANIL', ref: '101/101CD27/ARCFP/26/04/00001', total: 29687.25, overdue: 29687.26, days: 10 },
+
+  { sl: 5, client: 'Elegancia', project: 'Hotel West Shura Island', pm: 'ANIL', ref: '101/101MP219/ARCFP/25/12/00001', total: 11040.00, overdue: 11040.01, days: 124 },
+  { sl: 6, client: 'Elegancia', project: 'Hotel West DB Works', pm: 'BALA', ref: '101/101MP220/ARCFP/25/12/00001', total: 12730.50, overdue: 12730.51, days: 124 },
+  { sl: 7, client: 'Elegancia', project: 'Hotel West DB Works', pm: 'BALA', ref: '101/101MP220/ARCFP/26/02/00001', total: 32637.00, overdue: 32637.01, days: 51 },
+
+  { sl: 8, client: 'Al Yamama', project: 'Fire Fighting – Garden Boulevard', pm: 'ANIL', ref: '101/101CD03/ARCFP/26/01/00002', total: 406740.65, overdue: 406740.66, days: 98 },
+  { sl: 9, client: 'Al Yamama', project: 'Plumbing and Drainage', pm: 'ANIL', ref: '101/101CD02/ARCFP/26/02/00002', total: 516800.54, overdue: 516800.55, days: 73 },
+  { sl: 10, client: 'Al Yamama', project: 'Water Features', pm: 'ANIL', ref: '101/101CD05/ARCFP/26/02/00001', total: 290638.40, overdue: 290638.41, days: 54 },
+  { sl: 11, client: 'Al Yamama', project: 'Water Features', pm: 'ANIL', ref: '101/101CD05/ARCFP/26/03/00001', total: 1822569.34, overdue: 1822569.35, days: 25 },
+  { sl: 12, client: 'Al Yamama', project: 'Kiosk Structural', pm: 'ANIL', ref: '101/101CD01/ARCFP/26/03/00001', total: 457221.12, overdue: 457221.13, days: 25 },
+  { sl: 13, client: 'Al Yamama', project: 'Kiosk Structural', pm: 'ANIL', ref: '101/101CD01/ARCFP/26/04/00001', total: 153689.78, overdue: 153689.79, days: 3 },
+  { sl: 14, client: 'Al Yamama', project: 'Addressable Fire Alarm – Design Review', pm: 'ANIL', ref: '101/101CD44/ARCFP/26/04/00001', total: 57327.50, overdue: 57327.51, days: 3 },
+
+  { sl: 15, client: 'Al Futtaim', project: 'DB Dressing', pm: 'BALA', ref: '101/101MP221/ARCFP/26/02/00001', total: 27281.34, overdue: 27281.35, days: 49 },
+
+  { sl: 16, client: 'FGC', project: 'FGC Termination & Cladding', pm: 'BALA', ref: '101/101MP239/ARCFP/26/03/00001', total: 57442.50, overdue: 57442.51, days: 42 },
+
+  { sl: 17, client: 'Al Fanar', project: 'HVDC Converter', pm: 'ABDULLAH', ref: '101/101MF223/ARCFP/26/04/00001', total: 2351.75, overdue: 2351.76, days: 4 },
+  { sl: 18, client: 'Al Fanar', project: 'HVDC Converter', pm: 'ABDULLAH', ref: '101/101MF223/ARCFP/26/04/00002', total: 2886.50, overdue: 2886.51, days: 2 },
+
+  { sl: 19, client: 'Almabani', project: 'Pitchmastic Waterproofing', pm: 'OM', ref: '101/101CD16/ARCFP/26/01/00002', total: 116674.52, overdue: 116674.53, days: 96 },
+  { sl: 20, client: 'Almabani', project: 'Tree Gate', pm: 'EBEN', ref: '101/101CD39/ARCFP/26/01/00001', total: 15812.50, overdue: 15812.51, days: 91 },
+  { sl: 21, client: 'Almabani', project: 'Pitchmastic Waterproofing', pm: 'OM', ref: '101/101CD16/ARCFP/26/01/00003', total: 150089.72, overdue: 150089.73, days: 90 },
+  { sl: 22, client: 'Almabani', project: 'Sports Boulevard Linear Shade', pm: 'ABDULLAH', ref: '101/101MF217/ARCFP/26/03/00001', total: 294178.09, overdue: 294178.10, days: 19 }
 ];
 
 // ====== UTILS ======
