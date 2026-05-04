@@ -320,7 +320,7 @@ tr:last-child td{border-bottom:none}
     <span class="slicer-label">PM</span>
     <select class="slicer-sel" id="ov-pm-sel" onchange="filterOverview()">
       <option value="all">All PMs</option>
-      <option>ANIL</option><option>BALA</option><option>ABDULLAH</option><option>QAIS</option><option>EBEN</option>
+      <option>ANIL</option><option>BALA</option><option>ABDULLAHLLAH</option><option>QAIS</option><option>EBEN</option>
     </select>
     <button class="reset-btn" onclick="resetOverview()">↺ Reset</button>
   </div>
@@ -401,7 +401,7 @@ tr:last-child td{border-bottom:none}
       <div class="chip active" data-val="all" onclick="toggleChip(this,'prog')">All</div>
       <div class="chip" data-val="ANIL" onclick="toggleChip(this,'prog')">ANIL</div>
       <div class="chip" data-val="BALA" onclick="toggleChip(this,'prog')">BALA</div>
-      <div class="chip" data-val="ABDULLAH" onclick="toggleChip(this,'prog')">ABDULLAH</div>
+      <div class="chip" data-val="ABDULLAHLLAH" onclick="toggleChip(this,'prog')">ABDULLAHLLAH</div>
       <div class="chip" data-val="QAIS" onclick="toggleChip(this,'prog')">QAIS</div>
       <div class="chip" data-val="EBEN" onclick="toggleChip(this,'prog')">EBEN</div>
     </div>
@@ -734,7 +734,7 @@ tr:last-child td{border-bottom:none}
     <span class="slicer-label">PM</span>
     <select class="slicer-sel" id="od-pm" onchange="renderOverdue()">
       <option value="all">All PMs</option>
-      <option>ANIL</option><option>BALA</option><option>ABDULLAH</option><option>QAIS</option>
+      <option>ANIL</option><option>BALA</option><option>ABDULLAHLLAH</option><option>QAIS</option>
     </select>
     <span class="slicer-label">Min Days</span>
     <input class="slicer-input" id="od-mindays" type="number" placeholder="0" style="width:80px" oninput="renderOverdue()">
@@ -802,89 +802,86 @@ tr:last-child td{border-bottom:none}
 
 <script>
 // ====== DATA ======
+
 const progressData = [
-  {client:'Al Arabia',project:'Al Arabia Snag',code:'EBEN',contract:70359,afp:61181,progress:100,invoice:100},
-  {client:'Al Fanar',project:'Al Fanar',code:'ABDULLAH',contract:5161273,afp:541843,progress:12.07,invoice:10.46},
-  {client:'Al Futtaim',project:'Futtaim DB Dressing',code:'BALA',contract:165390.59,afp:143817.9,progress:76.37,invoice:76.37},
-  {client:'Al Yamama',project:'Al Urubah Park',code:'ANIL',contract:11463009.19,afp:7197392.59,progress:14.37,invoice:19.90},
-  {client:'Al Fahd',project:'Public Park Water',code:'BALA',contract:466500,afp:2145900,progress:0,invoice:21.74},
-  {client:'Almabani',project:'Sports Boulevard',code:'BALA',contract:6318487,afp:7266260,progress:34.43,invoice:41.71},
-  {client:'Elegancia',project:'Hotel West',code:'ANIL',contract:303450,afp:348968,progress:76.03,invoice:76.03},
-  {client:'Greenshore',project:'Qiddiya HDG',code:'ABDULLAH',contract:76924,afp:88463,progress:97.11,invoice:97.11},
-  {client:'FGC',project:'FGC Termination',code:'BALA',contract:138730,afp:159540,progress:36.01,invoice:36.01},
-  {client:'MBC',project:'MBC Media',code:'ANIL',contract:13713331,afp:15770330,progress:92.34,invoice:84.47},
-  {client:'MBL',project:'Yamama Palace',code:'ABDULLAH',contract:7277438,afp:8369054,progress:99.95,invoice:95.61},
-  {client:'MBL',project:'KAP',code:'QAIS',contract:17137809,afp:19708481,progress:38.47,invoice:35.16},
-  {client:'Shapoorji',project:'Al Nahda',code:'BALA',contract:3355259,afp:3858548,progress:18.31,invoice:18.31},
-  {client:'QTC',project:'Qiddiya Tennis',code:'ABDULLAH',contract:25550,afp:29383,progress:100,invoice:100}
+  {client:'Al Arabiya Media Network Company',project:'Al Arabia',code:'EBEN',contract:70358.61,afp:61181.40,progress:100,invoice:100},
+  {client:'Al Fanar Company Ltd.',project:'Al Fanar',code:'ABDULLAH',contract:5161272.94,afp:541842.73,progress:12,invoice:10},
+  {client:'Al Futtaim Engineering Technologies Ltd.',project:'Al Futtaim Engineering- DB Dressing',code:'BALA',contract:216559.95,afp:143817.90,progress:76,invoice:76},
+  {client:'Al Yamama Company For Trading & Contracting',project:'Al Urubah Park',code:'ANIL',contract:57612152.47,afp:7197392.59,progress:14,invoice:20},
+  {client:'Al-fahd Co Trading Industries and Contract',project:'Al Fahd-Public Park Water Foundation',code:'BALA',contract:2145900.49,afp:0,progress:0,invoice:22},
+  {client:'Almabani General Contractors Co.',project:'Sports Boulevard',code:null,contract:7266260.35,afp:2175464.58,progress:34,invoice:42},
+  {client:'Elegancia Arabic Trading Company',project:'Hotel West',code:'ANIL',contract:348967.50,afp:230700.00,progress:76,invoice:76},
+  {client:'Greenshore International Trading Company',project:'Qiddiya HDG Bracket',code:'ABDULLAH',contract:88463.06,afp:74700.00,progress:97,invoice:97},
+  {client:'First Gulf Contracting Company',project:'FGC Termination and Cladding',code:'BALA',contract:159539.50,afp:49950.00,progress:36,invoice:36},
+  {client:'Mbc Media Ksa Ltd.',project:'MBC',code:'ANIL',contract:15770330.08,afp:12662648.05,progress:92,invoice:84},
+  {client:'Modern Building Leaders Company',project:'Yamama Palace Fence and Gate',code:'ABDULLAH',contract:8369054.17,afp:7273901.11,progress:100,invoice:96},
+  {client:'Modern Building Leaders Company',project:'KAP',code:'QAIS',contract:19708480.74,afp:6592679.70,progress:38,invoice:35},
+  {client:'Shapoorji Pallonji Mideast (L.L.C)',project:'Al Nahda Entertainment Complex',code:'BALA',contract:3858547.85,afp:614309.92,progress:18,invoice:18},
+  {client:'QTC Joint Venture (Qiddiya Tennis Centre)',project:'QIDDIYA TENNIS CENTER – HDG MS',code:'ABDULLAH',contract:29382.50,afp:25550.00,progress:100,invoice:100}
 ];
 
 const budgetData = [
-  {name:'Al Urubah – Fire Fighting',group:'uruba',orig:8200000,revised:9430000,budget:6800000,ctd:1920000,cac:6650000,margin:29.5},
-  {name:'Al Urubah – Garden Blvd',group:'uruba',orig:6500000,revised:7475000,budget:5400000,ctd:1550000,cac:5200000,margin:30.4},
-  {name:'Al Urubah – Visitors Bldg',group:'uruba',orig:4100000,revised:4715000,budget:3400000,ctd:980000,cac:3250000,margin:31.1},
-  {name:'Al Urubah – Kiosk',group:'uruba',orig:1200000,revised:1380000,budget:1000000,ctd:280000,cac:950000,margin:31.2},
-  {name:'Al Urubah – Plumbing',group:'uruba',orig:3800000,revised:4370000,budget:3100000,ctd:870000,cac:2980000,margin:31.8},
-  {name:'Al Urubah – Waterfeatures',group:'uruba',orig:9200000,revised:10580000,budget:7600000,ctd:2150000,cac:7400000,margin:30.1},
-  {name:'KAP – Demolition',group:'kap',orig:1800000,revised:2070000,budget:1500000,ctd:410000,cac:1450000,margin:29.9},
-  {name:'KAP – Finishing',group:'kap',orig:3200000,revised:3680000,budget:2700000,ctd:790000,cac:2650000,margin:28.0},
-  {name:'KAP – Primary Culvert',group:'kap',orig:2500000,revised:2875000,budget:2100000,ctd:590000,cac:2050000,margin:28.7},
-  {name:'KAP – Retail Building',group:'kap',orig:1600000,revised:1840000,budget:1350000,ctd:2700000,cac:2690000,margin:-46.2},
-  {name:'KAP – Secondary Culvert',group:'kap',orig:1900000,revised:2185000,budget:1600000,ctd:440000,cac:1560000,margin:28.6},
-  {name:'MBC-001 Infrastructure',group:'mbc',orig:3800000,revised:4370000,budget:3200000,ctd:890000,cac:3100000,margin:29.1},
-  {name:'Hotel West – Elegancia',group:'others',orig:303450,revised:348968,budget:250000,ctd:68000,cac:245000,margin:29.7},
-  {name:'Sports Blvd – Pitchmastic',group:'sports',orig:3200000,revised:3680000,budget:2700000,ctd:780000,cac:2660000,margin:27.7},
-  {name:'Sports Blvd – Linear Shade',group:'sports',orig:2100000,revised:2415000,budget:1750000,ctd:490000,cac:1720000,margin:28.8},
-  {name:'Al Nahda – Shapoorji',group:'others',orig:3355259,revised:3858548,budget:2800000,ctd:780000,cac:2740000,margin:29.0}
+  {name:'AL URUBA PARK - Fire Fighting Works at Garden Boulevard',group:'uruba',orig:12705522.24,revised:15505273.29,budget:8940231.00,ctd:667112.71,cac:15447775.28,margin:96},
+  {name:'AL URUBA PARK - Fire Fighting Works at Visitors Building',group:'uruba',orig:2733809.00,revised:2733809.00,budget:null,ctd:null,cac:8925045.00,margin:100},
+  {name:'AL URUBA PARK - Kiosk Structural',group:'uruba',orig:3792912.00,revised:5057847.80,budget:3239590.44,ctd:821605.88,cac:4313375.33,margin:84},
+  {name:'AL URUBA PARK - Plumbing and Drainage',group:'uruba',orig:10054266.00,revised:10858314.80,budget:5138481.61,ctd:649664.23,cac:7817983.96,margin:94},
+  {name:'AL URUBA PARK - Supply and installation of Waterfeatures',group:'uruba',orig:15848429.00,revised:15848429.00,budget:null,ctd:1084497.28,cac:462608.84,margin:93},
+  {name:'Al Urubah - Design review Addressable Fire Alarm',group:'uruba',orig:49850.00,revised:49850.00,budget:null,ctd:null,cac:null,margin:100},
+  {name:'Al Urubah Park - Puddle Flange',group:'uruba',orig:44000.00,revised:44000.00,budget:null,ctd:null,cac:null,margin:100},
+  {name:'KAP DEMOLITION',group:'kap',orig:93984.00,revised:93984.00,budget:null,ctd:26364.12,cac:32370.49,margin:72},
+  {name:'KAP FINISHING WORK',group:'kap',orig:287970.00,revised:643258.02,budget:272514.50,ctd:46094.81,cac:322322.81,margin:93},
+  {name:'KAP PRIMARY CULVERT',group:'kap',orig:3514609.78,revised:6559120.91,budget:2927314.79,ctd:952406.26,cac:5137988.61,margin:85},
+  {name:'KAP RETAIL BUILDING',group:'kap',orig:6485017.57,revised:6485017.57,budget:6185757.86,ctd:1787575.86,cac:9504147.89,margin:72},
+  {name:'KAP SECONDARY CULVERT',group:'kap',orig:2123915.00,revised:3043400.84,budget:1905473.84,ctd:678793.28,cac:2399104.32,margin:78},
+  {name:'MBC-001 - MBC Infrastructure Project',group:'mbc',orig:6671521.00,revised:6671521.00,budget:null,ctd:3474766.61,cac:3550922.34,margin:48}
 ];
-
 const ledgerData = [
-  {name:'Al Urubah – Fire Fighting',rev:9430000,cost:1920000},
-  {name:'Al Urubah – Garden Blvd',rev:7475000,cost:1550000},
-  {name:'Al Urubah – Visitors Bldg',rev:4715000,cost:980000},
-  {name:'Al Urubah – Kiosk',rev:1380000,cost:280000},
-  {name:'Al Urubah – Plumbing',rev:4370000,cost:870000},
-  {name:'Al Urubah – Waterfeatures',rev:10580000,cost:2150000},
-  {name:'KAP – Demolition',rev:2070000,cost:410000},
-  {name:'KAP – Finishing',rev:3680000,cost:790000},
-  {name:'KAP – Primary Culvert',rev:2875000,cost:590000},
-  {name:'KAP – Retail Building',rev:1840000,cost:2690000},
-  {name:'KAP – Secondary Culvert',rev:2185000,cost:440000},
-  {name:'MBC Media (Main)',rev:13713331,cost:1350000},
-  {name:'MBC-001 Infrastructure',rev:4370000,cost:890000},
-  {name:'Hotel West – Elegancia',rev:303450,cost:68000},
-  {name:'Sports Blvd – Pitchmastic',rev:3680000,cost:780000},
-  {name:'Sports Blvd – Linear Shade',rev:2415000,cost:490000},
-  {name:'Al Nahda – Shapoorji',rev:3858548,cost:780000},
-  {name:'Al Arabia Snag',rev:61181,cost:12000},
-  {name:'Al Fanar',rev:4488063,cost:1200000},
-  {name:'DB Dressing – Al Futtaim',rev:188313,cost:55000},
-  {name:'Public Park Water – Al Fahd',rev:1866000,cost:480000},
-  {name:'Qiddiya HDG – Greenshore',rev:76924,cost:15000},
-  {name:'FGC Termination',rev:138730,cost:195000},
-  {name:'Yamama Palace – MBL',rev:7277438,cost:1100000},
-  {name:'Qiddiya Tennis – QTC',rev:25550,cost:5000},
-  {name:'Aramco Project A',rev:2200000,cost:380000},
-  {name:'Aramco Project B',rev:1800000,cost:320000},
-  {name:'Aramco Project C',rev:950000,cost:180000},
-  {name:'Al Fanar Sub-1',rev:820000,cost:210000},
-  {name:'Al Fanar Sub-2',rev:610000,cost:175000},
-  {name:'KAP Retail Sub',rev:450000,cost:520000},
-  {name:'Sports Linear Extension',rev:380000,cost:290000},
-  {name:'MBC Fit-Out',rev:720000,cost:195000},
-  {name:'Al Urubah Landscaping',rev:1100000,cost:320000},
-  {name:'Hotel West FF&E',rev:185000,cost:68000},
-  {name:'Al Yamama Supply',rev:880000,cost:210000},
-  {name:'Shapoorji MEP Sub',rev:420000,cost:130000},
-  {name:'Qiddiya Infra Phase 2',rev:650000,cost:180000},
-  {name:'Greenshore Supply',rev:120000,cost:38000},
-  {name:'Al Fahd Supply',rev:240000,cost:82000},
-  {name:'Aramco Maintenance',rev:310000,cost:88000},
-  {name:'MBL Variation Orders',rev:520000,cost:145000},
-  {name:'Al Fanar Safety Works',rev:280000,cost:95000},
-  {name:'FGC Sub-contract',rev:95000,cost:145000},
-  {name:'Al Arabia Supply',rev:18000,cost:7000},
-  {name:'Almabani Supply',rev:480000,cost:155000},
+  {name:'Al Arabia Phase 3',rev:0,cost:-41258.87},
+  {name:'Al Arabia Snag Works',rev:61181.40,cost:0},
+  {name:'AL Fahad - S/S Floor Drain',rev:6201,cost:-1655.87},
+  {name:'Al Fahd-Public Park Water Foundation',rev:0,cost:-4286.64},
+  {name:'Al Fanar – King Abdul Aziz Road',rev:0,cost:-45700.17},
+  {name:'Al Fanar – HVDC Converter',rev:201529.83,cost:-25852},
+  {name:'Al Fanar HVDC Station PE 319',rev:0,cost:-13428},
+  {name:'AL FANAR PE316C-137',rev:28916.62,cost:0},
+  {name:'AL FANAR PE319C-135',rev:63880.53,cost:0},
+  {name:'Al Fanar – Embedded Plate',rev:123010.16,cost:0},
+  {name:'Al Futtaim Engineering – DB Dressing',rev:205618.16,cost:-4070.78},
+  {name:'Al Kharj New Factory',rev:0,cost:-3418444.37},
+  {name:'Al Nahda Entertainment Complex',rev:614309.61,cost:-266548.86},
+  {name:'AL URUBA PARK – Garden Boulevard',rev:2755679.90,cost:-667112.71},
+  {name:'AL URUBA PARK – Visitors Building',rev:827968,cost:0},
+  {name:'AL URUBA PARK – Kiosk Structural',rev:1108298.81,cost:-816038.17},
+  {name:'AL URUBA PARK – Plumbing & Drainage',rev:514741.57,cost:-644529.23},
+  {name:'AL URUBA PARK – Waterfeatures',rev:1662500.50,cost:-1084497.28},
+  {name:'Al Urubah – Fire Alarm Review',rev:49850,cost:0},
+  {name:'Al Urubah Park – Puddle Flange',rev:44000,cost:0},
+  {name:'Elegancia – Hotel West Shura Island DB Works',rev:39450,cost:-710.55},
+  {name:'FGC Termination & Cladding',rev:49950,cost:0},
+  {name:'Geotechnical Earthworks – KAP Landform',rev:53006.31,cost:-47416.65},
+  {name:'Hotel West 03 Shura Island – Elegancia',rev:280334,cost:-16836.52},
+  {name:'KAP Demolition',rev:65788.80,cost:-26364.12},
+  {name:'KAP Finishing Work',rev:176905.79,cost:-42729.31},
+  {name:'KAP Primary Culvert',rev:3361127.41,cost:-962844.99},
+  {name:'KAP Retail Building',rev:1419184.22,cost:-1611936.66},
+  {name:'KAP Secondary Culvert',rev:867510.83,cost:-630773.41},
+  {name:'Lulu Diplomatic Quarters',rev:1443007.52,cost:0},
+  {name:'MBC Completed Project Cost',rev:49787583.69,cost:-561970.61},
+  {name:'MBC Media – Uplink Cable Tray',rev:53131,cost:0},
+  {name:'MBC Media – Logo',rev:157860,cost:-41112},
+  {name:'MBC Media – Water Line',rev:25815,cost:-4717.24},
+  {name:'MBC TCR & MCR',rev:6584378.20,cost:-1032127.46},
+  {name:'MBC-001 Infrastructure Project',rev:5816463.85,cost:-3394129.86},
+  {name:'MBC – Dismantling GRP Tank',rev:25000,cost:0},
+  {name:'Mockup – RVMF',rev:0,cost:-2700},
+  {name:'Plant & Machinery',rev:0,cost:-859906.90},
+  {name:'Qiddiya HDG Bracket',rev:74700,cost:-30796.88},
+  {name:'Qiddiya Tennis Center – HDG MS',rev:0,cost:-5404.66},
+  {name:'Sports Boulevard – Linear Shade',rev:914098.15,cost:-439906.77},
+  {name:'Sports Boulevard – Pitchmastic Waterproofing',rev:1247616.43,cost:-51032.25},
+  {name:'Tendering & Estimation',rev:0,cost:-16069.09},
+  {name:'Tree Grate',rev:13750,cost:0},
+  {name:'Yamama Palace Fence & Gate',rev:829337.74,cost:-12629.74}
 ];
 
 const clientColData = [
@@ -944,28 +941,28 @@ const overdueData = [
   {sl:7,client:'MBC',project:'MBC Media',pm:'ANIL',ref:'INV-2026-015',total:480000,overdue:480000,days:62},
   {sl:8,client:'KAP',project:'Retail Building',pm:'QAIS',ref:'INV-2026-018',total:325000,overdue:325000,days:58},
   {sl:9,client:'Al Yamama',project:'Visitors Bldg',pm:'ANIL',ref:'INV-2026-022',total:420000,overdue:420000,days:55},
-  {sl:10,client:'Al Fanar',project:'Al Fanar',pm:'ABDULLAH',ref:'INV-2026-025',total:280000,overdue:280000,days:51},
+  {sl:10,client:'Al Fanar',project:'Al Fanar',pm:'ABDULLAHLLAH',ref:'INV-2026-025',total:280000,overdue:280000,days:51},
   {sl:11,client:'Almabani',project:'Sports Linear',pm:'BALA',ref:'INV-2026-028',total:195000,overdue:195000,days:48},
   {sl:12,client:'Al Yamama',project:'Fire Fighting',pm:'ANIL',ref:'INV-2026-031',total:380000,overdue:380000,days:45},
   {sl:13,client:'KAP',project:'Primary Culvert',pm:'QAIS',ref:'INV-2026-034',total:220000,overdue:220000,days:42},
   {sl:14,client:'Al Nahda',project:'Al Nahda',pm:'BALA',ref:'INV-2026-037',total:165000,overdue:165000,days:40},
-  {sl:15,client:'MBL',project:'Yamama Palace',pm:'ABDULLAH',ref:'INV-2026-040',total:310000,overdue:310000,days:38},
+  {sl:15,client:'MBL',project:'Yamama Palace',pm:'ABDULLAHLLAH',ref:'INV-2026-040',total:310000,overdue:310000,days:38},
   {sl:16,client:'Al Yamama',project:'Kiosk',pm:'ANIL',ref:'INV-2026-043',total:145000,overdue:145000,days:35},
   {sl:17,client:'KAP',project:'Finishing',pm:'QAIS',ref:'INV-2026-046',total:280000,overdue:280000,days:32},
   {sl:18,client:'Al Futtaim',project:'DB Dressing',pm:'BALA',ref:'INV-2026-049',total:63342,overdue:63342,days:30},
   {sl:19,client:'Al Yamama',project:'Garden Blvd 2',pm:'ANIL',ref:'INV-2026-052',total:240000,overdue:240000,days:28},
   {sl:20,client:'Almabani',project:'Sports Blvd',pm:'BALA',ref:'INV-2026-055',total:180000,overdue:180000,days:25},
   {sl:21,client:'KAP',project:'Demolition',pm:'QAIS',ref:'INV-2026-058',total:155000,overdue:155000,days:22},
-  {sl:22,client:'Al Fanar',project:'Al Fanar B',pm:'ABDULLAH',ref:'INV-2026-061',total:120000,overdue:120000,days:20},
+  {sl:22,client:'Al Fanar',project:'Al Fanar B',pm:'ABDULLAHLLAH',ref:'INV-2026-061',total:120000,overdue:120000,days:20},
   {sl:23,client:'MBC',project:'MBC Infra',pm:'ANIL',ref:'INV-2026-064',total:95000,overdue:95000,days:18},
   {sl:24,client:'Al Yamama',project:'Plumbing B',pm:'ANIL',ref:'INV-2026-067',total:185000,overdue:185000,days:16},
   {sl:25,client:'Al Nahda',project:'Al Nahda B',pm:'BALA',ref:'INV-2026-070',total:78000,overdue:78000,days:14},
   {sl:26,client:'KAP',project:'Secondary Culvert',pm:'QAIS',ref:'INV-2026-073',total:142000,overdue:142000,days:12},
   {sl:27,client:'Al Yamama',project:'Waterfeatures B',pm:'ANIL',ref:'INV-2026-076',total:210000,overdue:210000,days:10},
   {sl:28,client:'Almabani',project:'Sports C',pm:'BALA',ref:'INV-2026-079',total:98000,overdue:98000,days:8},
-  {sl:29,client:'MBL',project:'Yamama B',pm:'ABDULLAH',ref:'INV-2026-082',total:168000,overdue:168000,days:6},
+  {sl:29,client:'MBL',project:'Yamama B',pm:'ABDULLAHLLAH',ref:'INV-2026-082',total:168000,overdue:168000,days:6},
   {sl:30,client:'Al Yamama',project:'Visitors B',pm:'ANIL',ref:'INV-2026-085',total:125000,overdue:125000,days:4},
-  {sl:31,client:'Al Fanar',project:'Al Fanar C',pm:'ABDULLAH',ref:'INV-2026-088',total:88000,overdue:88000,days:2},
+  {sl:31,client:'Al Fanar',project:'Al Fanar C',pm:'ABDULLAHLLAH',ref:'INV-2026-088',total:88000,overdue:88000,days:2},
   {sl:32,client:'FGC',project:'FGC Termination',pm:'BALA',ref:'INV-2026-091',total:55000,overdue:55000,days:1},
 ];
 
