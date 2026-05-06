@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RVCC Executive Dashboard — 25 Apr 2026</title>
+<title>RVCC Key Progress Dashboard </title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -320,7 +320,7 @@ tr:last-child td{border-bottom:none}
     <span class="slicer-label">PM</span>
     <select class="slicer-sel" id="ov-pm-sel" onchange="filterOverview()">
       <option value="all">All PMs</option>
-      <option>ANIL</option><option>BALA</option><option>ABDULLAHLLAH</option><option>QAIS</option><option>EBEN</option>
+      <option>ANIL</option><option>BALA</option><option>ABDULLAH</option><option>QAIS</option><option>EBEN</option>
     </select>
     <button class="reset-btn" onclick="resetOverview()">↺ Reset</button>
   </div>
@@ -401,7 +401,7 @@ tr:last-child td{border-bottom:none}
       <div class="chip active" data-val="all" onclick="toggleChip(this,'prog')">All</div>
       <div class="chip" data-val="ANIL" onclick="toggleChip(this,'prog')">ANIL</div>
       <div class="chip" data-val="BALA" onclick="toggleChip(this,'prog')">BALA</div>
-      <div class="chip" data-val="ABDULLAHLLAH" onclick="toggleChip(this,'prog')">ABDULLAHLLAH</div>
+      <div class="chip" data-val="ABDULLAH" onclick="toggleChip(this,'prog')">ABDULLAH</div>
       <div class="chip" data-val="QAIS" onclick="toggleChip(this,'prog')">QAIS</div>
       <div class="chip" data-val="EBEN" onclick="toggleChip(this,'prog')">EBEN</div>
     </div>
@@ -734,7 +734,7 @@ tr:last-child td{border-bottom:none}
     <span class="slicer-label">PM</span>
     <select class="slicer-sel" id="od-pm" onchange="renderOverdue()">
       <option value="all">All PMs</option>
-      <option>ANIL</option><option>BALA</option><option>ABDULLAHLLAH</option><option>QAIS</option>
+      <option>ANIL</option><option>BALA</option><option>ABDULLAH</option><option>QAIS</option>
     </select>
     <span class="slicer-label">Min Days</span>
     <input class="slicer-input" id="od-mindays" type="number" placeholder="0" style="width:80px" oninput="renderOverdue()">
@@ -1021,28 +1021,28 @@ const projColData = [
 //   {sl:7,client:'MBC',project:'MBC Media',pm:'ANIL',ref:'INV-2026-015',total:480000,overdue:480000,days:62},
 //   {sl:8,client:'KAP',project:'Retail Building',pm:'QAIS',ref:'INV-2026-018',total:325000,overdue:325000,days:58},
 //   {sl:9,client:'Al Yamama',project:'Visitors Bldg',pm:'ANIL',ref:'INV-2026-022',total:420000,overdue:420000,days:55},
-//   {sl:10,client:'Al Fanar',project:'Al Fanar',pm:'ABDULLAHLLAH',ref:'INV-2026-025',total:280000,overdue:280000,days:51},
+//   {sl:10,client:'Al Fanar',project:'Al Fanar',pm:'ABDULLAH',ref:'INV-2026-025',total:280000,overdue:280000,days:51},
 //   {sl:11,client:'Almabani',project:'Sports Linear',pm:'BALA',ref:'INV-2026-028',total:195000,overdue:195000,days:48},
 //   {sl:12,client:'Al Yamama',project:'Fire Fighting',pm:'ANIL',ref:'INV-2026-031',total:380000,overdue:380000,days:45},
 //   {sl:13,client:'KAP',project:'Primary Culvert',pm:'QAIS',ref:'INV-2026-034',total:220000,overdue:220000,days:42},
 //   {sl:14,client:'Al Nahda',project:'Al Nahda',pm:'BALA',ref:'INV-2026-037',total:165000,overdue:165000,days:40},
-//   {sl:15,client:'MBL',project:'Yamama Palace',pm:'ABDULLAHLLAH',ref:'INV-2026-040',total:310000,overdue:310000,days:38},
+//   {sl:15,client:'MBL',project:'Yamama Palace',pm:'ABDULLAH',ref:'INV-2026-040',total:310000,overdue:310000,days:38},
 //   {sl:16,client:'Al Yamama',project:'Kiosk',pm:'ANIL',ref:'INV-2026-043',total:145000,overdue:145000,days:35},
 //   {sl:17,client:'KAP',project:'Finishing',pm:'QAIS',ref:'INV-2026-046',total:280000,overdue:280000,days:32},
 //   {sl:18,client:'Al Futtaim',project:'DB Dressing',pm:'BALA',ref:'INV-2026-049',total:63342,overdue:63342,days:30},
 //   {sl:19,client:'Al Yamama',project:'Garden Blvd 2',pm:'ANIL',ref:'INV-2026-052',total:240000,overdue:240000,days:28},
 //   {sl:20,client:'Almabani',project:'Sports Blvd',pm:'BALA',ref:'INV-2026-055',total:180000,overdue:180000,days:25},
 //   {sl:21,client:'KAP',project:'Demolition',pm:'QAIS',ref:'INV-2026-058',total:155000,overdue:155000,days:22},
-//   {sl:22,client:'Al Fanar',project:'Al Fanar B',pm:'ABDULLAHLLAH',ref:'INV-2026-061',total:120000,overdue:120000,days:20},
+//   {sl:22,client:'Al Fanar',project:'Al Fanar B',pm:'ABDULLAH',ref:'INV-2026-061',total:120000,overdue:120000,days:20},
 //   {sl:23,client:'MBC',project:'MBC Infra',pm:'ANIL',ref:'INV-2026-064',total:95000,overdue:95000,days:18},
 //   {sl:24,client:'Al Yamama',project:'Plumbing B',pm:'ANIL',ref:'INV-2026-067',total:185000,overdue:185000,days:16},
 //   {sl:25,client:'Al Nahda',project:'Al Nahda B',pm:'BALA',ref:'INV-2026-070',total:78000,overdue:78000,days:14},
 //   {sl:26,client:'KAP',project:'Secondary Culvert',pm:'QAIS',ref:'INV-2026-073',total:142000,overdue:142000,days:12},
 //   {sl:27,client:'Al Yamama',project:'Waterfeatures B',pm:'ANIL',ref:'INV-2026-076',total:210000,overdue:210000,days:10},
 //   {sl:28,client:'Almabani',project:'Sports C',pm:'BALA',ref:'INV-2026-079',total:98000,overdue:98000,days:8},
-//   {sl:29,client:'MBL',project:'Yamama B',pm:'ABDULLAHLLAH',ref:'INV-2026-082',total:168000,overdue:168000,days:6},
+//   {sl:29,client:'MBL',project:'Yamama B',pm:'ABDULLAH',ref:'INV-2026-082',total:168000,overdue:168000,days:6},
 //   {sl:30,client:'Al Yamama',project:'Visitors B',pm:'ANIL',ref:'INV-2026-085',total:125000,overdue:125000,days:4},
-//   {sl:31,client:'Al Fanar',project:'Al Fanar C',pm:'ABDULLAHLLAH',ref:'INV-2026-088',total:88000,overdue:88000,days:2},
+//   {sl:31,client:'Al Fanar',project:'Al Fanar C',pm:'ABDULLAH',ref:'INV-2026-088',total:88000,overdue:88000,days:2},
 //   {sl:32,client:'FGC',project:'FGC Termination',pm:'BALA',ref:'INV-2026-091',total:55000,overdue:55000,days:1},
 // ];
 
